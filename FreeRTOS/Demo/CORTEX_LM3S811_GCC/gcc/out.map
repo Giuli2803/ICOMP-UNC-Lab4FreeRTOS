@@ -1,0 +1,630 @@
+Archive member included to satisfy reference by file (symbol)
+
+hw_include/libdriver.a(gpio_dirmodeset_.o)
+                              gcc/main.o (GPIODirModeSet)
+hw_include/libdriver.a(gpio_inttypeset_.o)
+                              gcc/main.o (GPIOIntTypeSet)
+hw_include/libdriver.a(gpio_pinintclear_.o)
+                              gcc/main.o (GPIOPinIntClear)
+hw_include/libdriver.a(gpio_pinintenable_.o)
+                              gcc/main.o (GPIOPinIntEnable)
+hw_include/libdriver.a(gpio_pintypei2c_.o)
+                              gcc/osram96x16.o (GPIOPinTypeI2C)
+hw_include/libdriver.a(i2c_mastercontrol_.o)
+                              gcc/osram96x16.o (I2CMasterControl)
+hw_include/libdriver.a(i2c_masterdataput_.o)
+                              gcc/osram96x16.o (I2CMasterDataPut)
+hw_include/libdriver.a(i2c_masterinit_.o)
+                              gcc/osram96x16.o (I2CMasterInit)
+hw_include/libdriver.a(i2c_masterintstatus_.o)
+                              gcc/osram96x16.o (I2CMasterIntStatus)
+hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
+                              gcc/osram96x16.o (I2CMasterSlaveAddrSet)
+hw_include/libdriver.a(interrupt_enable_.o)
+                              gcc/main.o (IntEnable)
+hw_include/libdriver.a(interrupt_priorityset_.o)
+                              gcc/main.o (IntPrioritySet)
+hw_include/libdriver.a(interrupt_pulregs_.o)
+                              hw_include/libdriver.a(interrupt_priorityset_.o) (g_pulRegs)
+hw_include/libdriver.a(sysctl_clockget_.o)
+                              hw_include/libdriver.a(i2c_masterinit_.o) (SysCtlClockGet)
+hw_include/libdriver.a(sysctl_clockset_.o)
+                              gcc/main.o (SysCtlClockSet)
+hw_include/libdriver.a(sysctl_peripheralenable_.o)
+                              gcc/main.o (SysCtlPeripheralEnable)
+hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+                              hw_include/libdriver.a(sysctl_peripheralenable_.o) (g_pulRCGCRegs)
+hw_include/libdriver.a(sysctl_pulxtals_.o)
+                              hw_include/libdriver.a(sysctl_clockget_.o) (g_pulXtals)
+hw_include/libdriver.a(uart_configset_.o)
+                              gcc/main.o (UARTConfigSet)
+hw_include/libdriver.a(uart_disable_.o)
+                              hw_include/libdriver.a(uart_configset_.o) (UARTDisable)
+hw_include/libdriver.a(uart_enable_.o)
+                              hw_include/libdriver.a(uart_configset_.o) (UARTEnable)
+hw_include/libdriver.a(uart_intclear_.o)
+                              gcc/main.o (UARTIntClear)
+hw_include/libdriver.a(uart_intdisable_.o)
+                              gcc/main.o (UARTIntDisable)
+hw_include/libdriver.a(uart_intenable_.o)
+                              gcc/main.o (UARTIntEnable)
+hw_include/libdriver.a(uart_intstatus_.o)
+                              gcc/main.o (UARTIntStatus)
+hw_include/libdriver.a(gpio_padconfigset_.o)
+                              hw_include/libdriver.a(gpio_pintypei2c_.o) (GPIOPadConfigSet)
+hw_include/libdriver.a(i2c_masterenable_.o)
+                              hw_include/libdriver.a(i2c_masterinit_.o) (I2CMasterEnable)
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+                              gcc/tasks.o (memset)
+/usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+                              gcc/queue.o (memcpy)
+
+There are no discarded input sections
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x00000000         0x00010000         xr
+SRAM             0x20000000         0x00002000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.text           0x00000000     0x43e4
+ *(.isr_vector)
+ .isr_vector    0x00000000       0xb8 gcc/startup.o
+                0x00000000                g_pfnVectors
+ *(.text*)
+ .text          0x000000b8       0x54 gcc/startup.o
+                0x000000b8                ResetISR
+ .text          0x0000010c      0x3d0 gcc/main.o
+                0x0000010c                main
+                0x000003e0                vUART_ISR
+                0x00000444                vGPIO_ISR
+ .text          0x000004dc      0x15e gcc/list.o
+                0x000004dc                vListInitialise
+                0x0000051a                vListInitialiseItem
+                0x00000532                vListInsertEnd
+                0x00000578                vListInsert
+                0x000005e8                uxListRemove
+ *fill*         0x0000063a        0x2 
+ .text          0x0000063c      0xc4c gcc/queue.o
+                0x0000063c                xQueueGenericReset
+                0x00000724                xQueueGenericCreate
+                0x000007e0                xQueueGenericSend
+                0x00000934                xQueueGenericSendFromISR
+                0x000009fe                xQueueGiveFromISR
+                0x00000ab6                xQueueReceive
+                0x00000bfc                xQueueSemaphoreTake
+                0x00000d38                xQueuePeek
+                0x00000e80                xQueueReceiveFromISR
+                0x00000f42                xQueuePeekFromISR
+                0x00000fa8                uxQueueMessagesWaiting
+                0x00000fc8                uxQueueSpacesAvailable
+                0x00000ff2                uxQueueMessagesWaitingFromISR
+                0x00001010                vQueueDelete
+                0x000011fe                xQueueIsQueueEmptyFromISR
+                0x00001258                xQueueIsQueueFullFromISR
+ .text          0x00001288     0x1758 gcc/tasks.o
+                0x00001288                xTaskCreate
+                0x00001504                xTaskDelayUntil
+                0x000015a8                vTaskDelay
+                0x000015f0                vTaskStartScheduler
+                0x00001668                vTaskEndScheduler
+                0x00001698                vTaskSuspendAll
+                0x000016b4                xTaskResumeAll
+                0x0000188c                xTaskGetTickCount
+                0x000018a8                xTaskGetTickCountFromISR
+                0x000018c8                uxTaskGetNumberOfTasks
+                0x000018dc                pcTaskGetName
+                0x00001908                xTaskCatchUpTicks
+                0x0000193c                xTaskIncrementTick
+                0x00001b48                vTaskSwitchContext
+                0x00001bd4                vTaskPlaceOnEventList
+                0x00001c00                vTaskPlaceOnUnorderedEventList
+                0x00001c70                xTaskRemoveFromEventList
+                0x00001e00                vTaskRemoveFromUnorderedEventList
+                0x00001f40                vTaskSetTimeOutState
+                0x00001f70                vTaskInternalSetTimeOutState
+                0x00001f9c                xTaskCheckForTimeOut
+                0x00002020                vTaskMissedYield
+                0x000020f0                xTaskGetCurrentTaskHandle
+                0x0000210c                uxTaskResetEventItemValue
+                0x0000213c                ulTaskGenericNotifyTake
+                0x000021f0                xTaskGenericNotifyWait
+                0x000022d4                xTaskGenericNotify
+                0x00002498                xTaskGenericNotifyFromISR
+                0x000026d0                vTaskGenericNotifyGiveFromISR
+                0x00002884                xTaskGenericNotifyStateClear
+                0x000028dc                ulTaskGenericNotifyValueClear
+ .text          0x000029e0      0x250 gcc/port.o
+                0x000029e0                pxPortInitialiseStack
+                0x00002a6a                vPortSVCHandler
+                0x00002ab6                xPortStartScheduler
+                0x00002af8                vPortEndScheduler
+                0x00002b04                vPortEnterCritical
+                0x00002b38                vPortExitCritical
+                0x00002b6c                xPortPendSVHandler
+                0x00002bb6                xPortSysTickHandler
+                0x00002bfc                vPortSetupTimerInterrupt
+ .text          0x00002c30       0xe8 gcc/heap_1.o
+                0x00002c30                pvPortMalloc
+                0x00002cd4                vPortFree
+                0x00002ce6                vPortInitialiseBlocks
+                0x00002cfc                xPortGetFreeHeapSize
+ .text          0x00002d18      0x2dc gcc/BlockQ.o
+                0x00002d18                vStartBlockingQueueTasks
+                0x00002f62                xAreBlockingQueuesStillRunning
+ .text          0x00002ff4      0x184 gcc/PollQ.o
+                0x00002ff4                vStartPolledQueueTasks
+                0x00003138                xArePollingQueuesStillRunning
+ .text          0x00003178      0x114 gcc/integer.o
+                0x00003178                vStartIntegerMathTasks
+                0x00003238                xAreIntegerMathsTaskStillRunning
+ .text          0x0000328c      0x290 gcc/semtest.o
+                0x0000328c                vStartSemaphoreTasks
+                0x000034c0                xAreSemaphoreTasksStillRunning
+ .text          0x0000351c      0x4c0 gcc/osram96x16.o
+                0x0000365c                OSRAMClear
+                0x000036cc                OSRAMStringDraw
+                0x000037d4                OSRAMImageDraw
+                0x0000387a                OSRAMInit
+                0x0000393c                OSRAMDisplayOn
+                0x000039b0                OSRAMDisplayOff
+ .text          0x000039dc       0x48 hw_include/libdriver.a(gpio_dirmodeset_.o)
+                0x000039dc                GPIODirModeSet
+ .text          0x00003a24       0x74 hw_include/libdriver.a(gpio_inttypeset_.o)
+                0x00003a24                GPIOIntTypeSet
+ .text          0x00003a98        0x8 hw_include/libdriver.a(gpio_pinintclear_.o)
+                0x00003a98                GPIOPinIntClear
+ .text          0x00003aa0        0xc hw_include/libdriver.a(gpio_pinintenable_.o)
+                0x00003aa0                GPIOPinIntEnable
+ .text          0x00003aac       0x20 hw_include/libdriver.a(gpio_pintypei2c_.o)
+                0x00003aac                GPIOPinTypeI2C
+ .text          0x00003acc        0x4 hw_include/libdriver.a(i2c_mastercontrol_.o)
+                0x00003acc                I2CMasterControl
+ .text          0x00003ad0        0x4 hw_include/libdriver.a(i2c_masterdataput_.o)
+                0x00003ad0                I2CMasterDataPut
+ .text          0x00003ad4       0x34 hw_include/libdriver.a(i2c_masterinit_.o)
+                0x00003ad4                I2CMasterInit
+ .text          0x00003b08       0x18 hw_include/libdriver.a(i2c_masterintstatus_.o)
+                0x00003b08                I2CMasterIntStatus
+ .text          0x00003b20        0x8 hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
+                0x00003b20                I2CMasterSlaveAddrSet
+ .text          0x00003b28       0x5c hw_include/libdriver.a(interrupt_enable_.o)
+                0x00003b28                IntEnable
+ .text          0x00003b84       0x30 hw_include/libdriver.a(interrupt_priorityset_.o)
+                0x00003b84                IntPrioritySet
+ .text          0x00003bb4        0x0 hw_include/libdriver.a(interrupt_pulregs_.o)
+ .text          0x00003bb4       0x90 hw_include/libdriver.a(sysctl_clockget_.o)
+                0x00003bb4                SysCtlClockGet
+ .text          0x00003c44       0xcc hw_include/libdriver.a(sysctl_clockset_.o)
+                0x00003c44                SysCtlClockSet
+ .text          0x00003d10       0x1c hw_include/libdriver.a(sysctl_peripheralenable_.o)
+                0x00003d10                SysCtlPeripheralEnable
+ .text          0x00003d2c        0x0 hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+ .text          0x00003d2c        0x0 hw_include/libdriver.a(sysctl_pulxtals_.o)
+ .text          0x00003d2c       0x38 hw_include/libdriver.a(uart_configset_.o)
+                0x00003d2c                UARTConfigSet
+ .text          0x00003d64       0x24 hw_include/libdriver.a(uart_disable_.o)
+                0x00003d64                UARTDisable
+ .text          0x00003d88       0x18 hw_include/libdriver.a(uart_enable_.o)
+                0x00003d88                UARTEnable
+ .text          0x00003da0        0x4 hw_include/libdriver.a(uart_intclear_.o)
+                0x00003da0                UARTIntClear
+ .text          0x00003da4        0xc hw_include/libdriver.a(uart_intdisable_.o)
+                0x00003da4                UARTIntDisable
+ .text          0x00003db0        0x8 hw_include/libdriver.a(uart_intenable_.o)
+                0x00003db0                UARTIntEnable
+ .text          0x00003db8        0xc hw_include/libdriver.a(uart_intstatus_.o)
+                0x00003db8                UARTIntStatus
+ .text          0x00003dc4      0x11c hw_include/libdriver.a(gpio_padconfigset_.o)
+                0x00003dc4                GPIOPadConfigSet
+ .text          0x00003ee0        0xc hw_include/libdriver.a(i2c_masterenable_.o)
+                0x00003ee0                I2CMasterEnable
+ .text          0x00003eec       0xb0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+                0x00003eec                memset
+ .text          0x00003f9c       0x90 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+                0x00003f9c                memcpy
+ *(.rodata*)
+ .rodata        0x0000402c       0x78 gcc/main.o
+ .rodata        0x000040a4        0x9 gcc/tasks.o
+                0x000040a4                uxTopUsedPriority
+ *fill*         0x000040ad        0x3 
+ .rodata        0x000040b0       0x30 gcc/BlockQ.o
+ .rodata        0x000040e0       0x10 gcc/PollQ.o
+ .rodata        0x000040f0        0x8 gcc/integer.o
+ .rodata        0x000040f8       0x20 gcc/semtest.o
+ .rodata        0x00004118      0x25e gcc/osram96x16.o
+ *fill*         0x00004376        0x2 
+ .rodata        0x00004378       0x30 hw_include/libdriver.a(interrupt_pulregs_.o)
+                0x00004378                g_pulRegs
+ .rodata        0x000043a8        0xc hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+                0x000043a8                g_pulRCGCRegs
+ .rodata        0x000043b4       0x30 hw_include/libdriver.a(sysctl_pulxtals_.o)
+                0x000043b4                g_pulXtals
+                0x000043e4                        _etext = .
+
+.glue_7         0x000043e4        0x0
+ .glue_7        0x000043e4        0x0 linker stubs
+
+.glue_7t        0x000043e4        0x0
+ .glue_7t       0x000043e4        0x0 linker stubs
+
+.vfp11_veneer   0x000043e4        0x0
+ .vfp11_veneer  0x000043e4        0x0 linker stubs
+
+.v4_bx          0x000043e4        0x0
+ .v4_bx         0x000043e4        0x0 linker stubs
+
+.iplt           0x000043e4        0x0
+ .iplt          0x000043e4        0x0 gcc/startup.o
+
+.rel.dyn        0x000043e4        0x0
+ .rel.iplt      0x000043e4        0x0 gcc/startup.o
+
+.data           0x20000000        0x8 load address 0x000043e4
+                0x20000000                        _data = .
+ *(vtable)
+ *(.data)
+ .data          0x20000000        0x0 gcc/startup.o
+ .data          0x20000000        0x4 gcc/main.o
+ .data          0x20000004        0x0 gcc/list.o
+ .data          0x20000004        0x0 gcc/queue.o
+ .data          0x20000004        0x0 gcc/tasks.o
+ .data          0x20000004        0x4 gcc/port.o
+ .data          0x20000008        0x0 gcc/heap_1.o
+ .data          0x20000008        0x0 gcc/BlockQ.o
+ .data          0x20000008        0x0 gcc/PollQ.o
+ .data          0x20000008        0x0 gcc/integer.o
+ .data          0x20000008        0x0 gcc/semtest.o
+ .data          0x20000008        0x0 gcc/osram96x16.o
+ .data          0x20000008        0x0 hw_include/libdriver.a(gpio_dirmodeset_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(gpio_inttypeset_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(gpio_pinintclear_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(gpio_pinintenable_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(gpio_pintypei2c_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(i2c_mastercontrol_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(i2c_masterdataput_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(i2c_masterinit_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(i2c_masterintstatus_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(interrupt_enable_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(interrupt_priorityset_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(interrupt_pulregs_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(sysctl_clockget_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(sysctl_clockset_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(sysctl_peripheralenable_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(sysctl_pulxtals_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(uart_configset_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(uart_disable_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(uart_enable_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(uart_intclear_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(uart_intdisable_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(uart_intenable_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(uart_intstatus_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(gpio_padconfigset_.o)
+ .data          0x20000008        0x0 hw_include/libdriver.a(i2c_masterenable_.o)
+ .data          0x20000008        0x0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .data          0x20000008        0x0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+                0x20000008                        _edata = .
+
+.igot.plt       0x20000008        0x0 load address 0x000043ec
+ .igot.plt      0x20000008        0x0 gcc/startup.o
+
+.bss            0x20000008     0x1d8c load address 0x000043ec
+                0x20000008                        _bss = .
+ *(.bss)
+ .bss           0x20000008      0x100 gcc/startup.o
+ .bss           0x20000108        0xc gcc/main.o
+                0x2000010c                xButtonSemaphore
+                0x20000110                xPrintQueue
+ .bss           0x20000114        0x0 gcc/list.o
+ .bss           0x20000114        0x0 gcc/queue.o
+ .bss           0x20000114       0xd8 gcc/tasks.o
+                0x20000114                pxCurrentTCB
+ .bss           0x200001ec        0x0 gcc/port.o
+ .bss           0x200001ec     0x1b60 gcc/heap_1.o
+ .bss           0x20001d4c       0x1e gcc/BlockQ.o
+ *fill*         0x20001d6a        0x2 
+ .bss           0x20001d6c        0xc gcc/PollQ.o
+ .bss           0x20001d78        0x4 gcc/integer.o
+ .bss           0x20001d7c       0x14 gcc/semtest.o
+ .bss           0x20001d90        0x4 gcc/osram96x16.o
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(gpio_dirmodeset_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(gpio_inttypeset_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(gpio_pinintclear_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(gpio_pinintenable_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(gpio_pintypei2c_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(i2c_mastercontrol_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(i2c_masterdataput_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(i2c_masterinit_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(i2c_masterintstatus_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(interrupt_enable_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(interrupt_priorityset_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(interrupt_pulregs_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(sysctl_clockget_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(sysctl_clockset_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(sysctl_peripheralenable_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(sysctl_pulxtals_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(uart_configset_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(uart_disable_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(uart_enable_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(uart_intclear_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(uart_intdisable_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(uart_intenable_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(uart_intstatus_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(gpio_padconfigset_.o)
+ .bss           0x20001d94        0x0 hw_include/libdriver.a(i2c_masterenable_.o)
+ .bss           0x20001d94        0x0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .bss           0x20001d94        0x0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+ *(COMMON)
+                0x20001d94                        _ebss = .
+LOAD gcc/startup.o
+LOAD gcc/main.o
+LOAD gcc/list.o
+LOAD gcc/queue.o
+LOAD gcc/tasks.o
+LOAD gcc/port.o
+LOAD gcc/heap_1.o
+LOAD gcc/BlockQ.o
+LOAD gcc/PollQ.o
+LOAD gcc/integer.o
+LOAD gcc/semtest.o
+LOAD gcc/osram96x16.o
+LOAD hw_include/libdriver.a
+LOAD /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a
+LOAD /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/nofp/libgcc.a
+OUTPUT(gcc/RTOSDemo.axf elf32-littlearm)
+LOAD linker stubs
+
+.debug_info     0x00000000     0x45bc
+ .debug_info    0x00000000      0x13b gcc/startup.o
+ .debug_info    0x0000013b      0x60f gcc/main.o
+ .debug_info    0x0000074a      0x29f gcc/list.o
+ .debug_info    0x000009e9      0xef7 gcc/queue.o
+ .debug_info    0x000018e0     0x14e1 gcc/tasks.o
+ .debug_info    0x00002dc1      0x2d7 gcc/port.o
+ .debug_info    0x00003098      0x18e gcc/heap_1.o
+ .debug_info    0x00003226      0x44e gcc/BlockQ.o
+ .debug_info    0x00003674      0x33e gcc/PollQ.o
+ .debug_info    0x000039b2      0x217 gcc/integer.o
+ .debug_info    0x00003bc9      0x3d5 gcc/semtest.o
+ .debug_info    0x00003f9e      0x397 gcc/osram96x16.o
+ .debug_info    0x00004335      0x135 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_info    0x0000446a      0x152 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.debug_abbrev   0x00000000     0x14c7
+ .debug_abbrev  0x00000000       0xee gcc/startup.o
+ .debug_abbrev  0x000000ee      0x1fe gcc/main.o
+ .debug_abbrev  0x000002ec       0xf3 gcc/list.o
+ .debug_abbrev  0x000003df      0x2a1 gcc/queue.o
+ .debug_abbrev  0x00000680      0x32d gcc/tasks.o
+ .debug_abbrev  0x000009ad      0x20a gcc/port.o
+ .debug_abbrev  0x00000bb7      0x121 gcc/heap_1.o
+ .debug_abbrev  0x00000cd8      0x161 gcc/BlockQ.o
+ .debug_abbrev  0x00000e39      0x12c gcc/PollQ.o
+ .debug_abbrev  0x00000f65      0x122 gcc/integer.o
+ .debug_abbrev  0x00001087      0x189 gcc/semtest.o
+ .debug_abbrev  0x00001210      0x136 gcc/osram96x16.o
+ .debug_abbrev  0x00001346       0xb7 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_abbrev  0x000013fd       0xca /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.debug_aranges  0x00000000      0x1c0
+ .debug_aranges
+                0x00000000       0x20 gcc/startup.o
+ .debug_aranges
+                0x00000020       0x20 gcc/main.o
+ .debug_aranges
+                0x00000040       0x20 gcc/list.o
+ .debug_aranges
+                0x00000060       0x20 gcc/queue.o
+ .debug_aranges
+                0x00000080       0x20 gcc/tasks.o
+ .debug_aranges
+                0x000000a0       0x20 gcc/port.o
+ .debug_aranges
+                0x000000c0       0x20 gcc/heap_1.o
+ .debug_aranges
+                0x000000e0       0x20 gcc/BlockQ.o
+ .debug_aranges
+                0x00000100       0x20 gcc/PollQ.o
+ .debug_aranges
+                0x00000120       0x20 gcc/integer.o
+ .debug_aranges
+                0x00000140       0x20 gcc/semtest.o
+ .debug_aranges
+                0x00000160       0x20 gcc/osram96x16.o
+ .debug_aranges
+                0x00000180       0x20 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_aranges
+                0x000001a0       0x20 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.debug_line     0x00000000     0x2810
+ .debug_line    0x00000000       0x7b gcc/startup.o
+ .debug_line    0x0000007b      0x2d7 gcc/main.o
+ .debug_line    0x00000352      0x1a8 gcc/list.o
+ .debug_line    0x000004fa      0x820 gcc/queue.o
+ .debug_line    0x00000d1a      0x944 gcc/tasks.o
+ .debug_line    0x0000165e      0x21a gcc/port.o
+ .debug_line    0x00001878      0x162 gcc/heap_1.o
+ .debug_line    0x000019da      0x24a gcc/BlockQ.o
+ .debug_line    0x00001c24      0x1c8 gcc/PollQ.o
+ .debug_line    0x00001dec      0x173 gcc/integer.o
+ .debug_line    0x00001f5f      0x25a gcc/semtest.o
+ .debug_line    0x000021b9      0x2b9 gcc/osram96x16.o
+ .debug_line    0x00002472      0x1bd /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_line    0x0000262f      0x1e1 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.debug_str      0x00000000     0x1bcc
+ .debug_str     0x00000000     0x1bcc gcc/startup.o
+                                0x166 (size before relaxing)
+ .debug_str     0x00001bcc      0x573 gcc/main.o
+ .debug_str     0x00001bcc      0x297 gcc/list.o
+ .debug_str     0x00001bcc      0x7e5 gcc/queue.o
+ .debug_str     0x00001bcc      0xc77 gcc/tasks.o
+ .debug_str     0x00001bcc      0x321 gcc/port.o
+ .debug_str     0x00001bcc      0x21f gcc/heap_1.o
+ .debug_str     0x00001bcc      0x455 gcc/BlockQ.o
+ .debug_str     0x00001bcc      0x34a gcc/PollQ.o
+ .debug_str     0x00001bcc      0x278 gcc/integer.o
+ .debug_str     0x00001bcc      0x3ea gcc/semtest.o
+ .debug_str     0x00001bcc      0x28d gcc/osram96x16.o
+ .debug_str     0x00001bcc      0x1a6 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_str     0x00001bcc      0x1c3 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.comment        0x00000000      0x3bc
+ .comment       0x00000000       0x26 gcc/startup.o
+                                 0x27 (size before relaxing)
+ .comment       0x00000026       0x27 gcc/main.o
+ .comment       0x00000026       0x27 gcc/list.o
+ .comment       0x00000026       0x27 gcc/queue.o
+ .comment       0x00000026       0x27 gcc/tasks.o
+ .comment       0x00000026       0x27 gcc/port.o
+ .comment       0x00000026       0x27 gcc/heap_1.o
+ .comment       0x00000026       0x27 gcc/BlockQ.o
+ .comment       0x00000026       0x27 gcc/PollQ.o
+ .comment       0x00000026       0x27 gcc/integer.o
+ .comment       0x00000026       0x27 gcc/semtest.o
+ .comment       0x00000026       0x27 gcc/osram96x16.o
+ .comment       0x00000026       0x22 hw_include/libdriver.a(gpio_dirmodeset_.o)
+ .comment       0x00000048       0x22 hw_include/libdriver.a(gpio_inttypeset_.o)
+ .comment       0x0000006a       0x22 hw_include/libdriver.a(gpio_pinintclear_.o)
+ .comment       0x0000008c       0x22 hw_include/libdriver.a(gpio_pinintenable_.o)
+ .comment       0x000000ae       0x22 hw_include/libdriver.a(gpio_pintypei2c_.o)
+ .comment       0x000000d0       0x22 hw_include/libdriver.a(i2c_mastercontrol_.o)
+ .comment       0x000000f2       0x22 hw_include/libdriver.a(i2c_masterdataput_.o)
+ .comment       0x00000114       0x22 hw_include/libdriver.a(i2c_masterinit_.o)
+ .comment       0x00000136       0x22 hw_include/libdriver.a(i2c_masterintstatus_.o)
+ .comment       0x00000158       0x22 hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
+ .comment       0x0000017a       0x22 hw_include/libdriver.a(interrupt_enable_.o)
+ .comment       0x0000019c       0x22 hw_include/libdriver.a(interrupt_priorityset_.o)
+ .comment       0x000001be       0x22 hw_include/libdriver.a(interrupt_pulregs_.o)
+ .comment       0x000001e0       0x22 hw_include/libdriver.a(sysctl_clockget_.o)
+ .comment       0x00000202       0x22 hw_include/libdriver.a(sysctl_clockset_.o)
+ .comment       0x00000224       0x22 hw_include/libdriver.a(sysctl_peripheralenable_.o)
+ .comment       0x00000246       0x22 hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+ .comment       0x00000268       0x22 hw_include/libdriver.a(sysctl_pulxtals_.o)
+ .comment       0x0000028a       0x22 hw_include/libdriver.a(uart_configset_.o)
+ .comment       0x000002ac       0x22 hw_include/libdriver.a(uart_disable_.o)
+ .comment       0x000002ce       0x22 hw_include/libdriver.a(uart_enable_.o)
+ .comment       0x000002f0       0x22 hw_include/libdriver.a(uart_intclear_.o)
+ .comment       0x00000312       0x22 hw_include/libdriver.a(uart_intdisable_.o)
+ .comment       0x00000334       0x22 hw_include/libdriver.a(uart_intenable_.o)
+ .comment       0x00000356       0x22 hw_include/libdriver.a(uart_intstatus_.o)
+ .comment       0x00000378       0x22 hw_include/libdriver.a(gpio_padconfigset_.o)
+ .comment       0x0000039a       0x22 hw_include/libdriver.a(i2c_masterenable_.o)
+ .comment       0x000003bc       0x27 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .comment       0x000003bc       0x27 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.ARM.attributes
+                0x00000000       0x2f
+ .ARM.attributes
+                0x00000000       0x2d gcc/startup.o
+ .ARM.attributes
+                0x0000002d       0x2d gcc/main.o
+ .ARM.attributes
+                0x0000005a       0x2d gcc/list.o
+ .ARM.attributes
+                0x00000087       0x2d gcc/queue.o
+ .ARM.attributes
+                0x000000b4       0x2d gcc/tasks.o
+ .ARM.attributes
+                0x000000e1       0x2d gcc/port.o
+ .ARM.attributes
+                0x0000010e       0x2d gcc/heap_1.o
+ .ARM.attributes
+                0x0000013b       0x2d gcc/BlockQ.o
+ .ARM.attributes
+                0x00000168       0x2d gcc/PollQ.o
+ .ARM.attributes
+                0x00000195       0x2d gcc/integer.o
+ .ARM.attributes
+                0x000001c2       0x2d gcc/semtest.o
+ .ARM.attributes
+                0x000001ef       0x2d gcc/osram96x16.o
+ .ARM.attributes
+                0x0000021c       0x31 hw_include/libdriver.a(gpio_dirmodeset_.o)
+ .ARM.attributes
+                0x0000024d       0x31 hw_include/libdriver.a(gpio_inttypeset_.o)
+ .ARM.attributes
+                0x0000027e       0x31 hw_include/libdriver.a(gpio_pinintclear_.o)
+ .ARM.attributes
+                0x000002af       0x31 hw_include/libdriver.a(gpio_pinintenable_.o)
+ .ARM.attributes
+                0x000002e0       0x31 hw_include/libdriver.a(gpio_pintypei2c_.o)
+ .ARM.attributes
+                0x00000311       0x31 hw_include/libdriver.a(i2c_mastercontrol_.o)
+ .ARM.attributes
+                0x00000342       0x31 hw_include/libdriver.a(i2c_masterdataput_.o)
+ .ARM.attributes
+                0x00000373       0x31 hw_include/libdriver.a(i2c_masterinit_.o)
+ .ARM.attributes
+                0x000003a4       0x31 hw_include/libdriver.a(i2c_masterintstatus_.o)
+ .ARM.attributes
+                0x000003d5       0x31 hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
+ .ARM.attributes
+                0x00000406       0x31 hw_include/libdriver.a(interrupt_enable_.o)
+ .ARM.attributes
+                0x00000437       0x31 hw_include/libdriver.a(interrupt_priorityset_.o)
+ .ARM.attributes
+                0x00000468       0x2f hw_include/libdriver.a(interrupt_pulregs_.o)
+ .ARM.attributes
+                0x00000497       0x31 hw_include/libdriver.a(sysctl_clockget_.o)
+ .ARM.attributes
+                0x000004c8       0x31 hw_include/libdriver.a(sysctl_clockset_.o)
+ .ARM.attributes
+                0x000004f9       0x31 hw_include/libdriver.a(sysctl_peripheralenable_.o)
+ .ARM.attributes
+                0x0000052a       0x2f hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+ .ARM.attributes
+                0x00000559       0x2f hw_include/libdriver.a(sysctl_pulxtals_.o)
+ .ARM.attributes
+                0x00000588       0x31 hw_include/libdriver.a(uart_configset_.o)
+ .ARM.attributes
+                0x000005b9       0x31 hw_include/libdriver.a(uart_disable_.o)
+ .ARM.attributes
+                0x000005ea       0x31 hw_include/libdriver.a(uart_enable_.o)
+ .ARM.attributes
+                0x0000061b       0x31 hw_include/libdriver.a(uart_intclear_.o)
+ .ARM.attributes
+                0x0000064c       0x31 hw_include/libdriver.a(uart_intdisable_.o)
+ .ARM.attributes
+                0x0000067d       0x31 hw_include/libdriver.a(uart_intenable_.o)
+ .ARM.attributes
+                0x000006ae       0x31 hw_include/libdriver.a(uart_intstatus_.o)
+ .ARM.attributes
+                0x000006df       0x31 hw_include/libdriver.a(gpio_padconfigset_.o)
+ .ARM.attributes
+                0x00000710       0x31 hw_include/libdriver.a(i2c_masterenable_.o)
+ .ARM.attributes
+                0x00000741       0x2a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .ARM.attributes
+                0x0000076b       0x2a /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.debug_frame    0x00000000     0x1114
+ .debug_frame   0x00000000       0x7c gcc/startup.o
+ .debug_frame   0x0000007c       0xf8 gcc/main.o
+ .debug_frame   0x00000174       0xd8 gcc/list.o
+ .debug_frame   0x0000024c      0x334 gcc/queue.o
+ .debug_frame   0x00000580      0x580 gcc/tasks.o
+ .debug_frame   0x00000b00      0x160 gcc/port.o
+ .debug_frame   0x00000c60       0x9c gcc/heap_1.o
+ .debug_frame   0x00000cfc       0xa0 gcc/BlockQ.o
+ .debug_frame   0x00000d9c       0x9c gcc/PollQ.o
+ .debug_frame   0x00000e38       0x7c gcc/integer.o
+ .debug_frame   0x00000eb4       0x80 gcc/semtest.o
+ .debug_frame   0x00000f34      0x180 gcc/osram96x16.o
+ .debug_frame   0x000010b4       0x30 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_frame   0x000010e4       0x30 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+
+.debug_loclists
+                0x00000000      0x48d
+ .debug_loclists
+                0x00000000      0x1c6 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_loclists
+                0x000001c6      0x2c7 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
