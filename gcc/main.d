@@ -9,13 +9,12 @@ gcc/main.o: main.c hw_include/DriverLib.h hw_include/DriverLib.h \
  hw_include/gpio.h hw_include/i2c.h hw_include/interrupt.h \
  hw_include/pwm.h hw_include/qei.h hw_include/ssi.h hw_include/sysctl.h \
  hw_include/systick.h hw_include/timer.h hw_include/uart.h \
- hw_include/watchdog.h ../../Source/include/FreeRTOS.h \
+ hw_include/watchdog.h Source/include/FreeRTOS.h \
  /usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h \
  /usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h FreeRTOSConfig.h \
- ../../Source/include/projdefs.h ../../Source/include/portable.h \
- ../../Source/include/deprecated_definitions.h \
- ../../Source/include/../../Source/portable/GCC/ARM_CM3/portmacro.h \
- ../../Source/include/mpu_wrappers.h ../../Source/include/task.h \
- ../../Source/include/list.h ../../Source/include/queue.h \
- ../../Source/include/task.h ../../Source/include/semphr.h \
- ../../Source/include/queue.h
+ Source/include/projdefs.h Source/include/portable.h \
+ Source/include/deprecated_definitions.h \
+ Source/include/../../Source/portable/GCC/ARM_CM3/portmacro.h \
+ Source/include/mpu_wrappers.h Source/include/task.h \
+ Source/include/list.h Source/include/queue.h Source/include/task.h \
+ Source/include/semphr.h Source/include/queue.h

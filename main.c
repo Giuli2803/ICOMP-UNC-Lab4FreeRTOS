@@ -7,6 +7,10 @@
 #include "queue.h"
 #include "semphr.h"
 
+#define OLED_WIDTH 96
+#define OLED_HEIGHT 16
+#define MAX_FILTER_SIZE 50
+
 #define mainSENSOR_TASK_PRIORITY (tskIDLE_PRIORITY + 3)
 
 /*
@@ -71,10 +75,10 @@ unsigned portBASE_TYPE uxLine = 0, uxRow = 0;
 
 void vGPIO_ISR(void)
 {
-    // Implementación de la rutina de interrupción del GPIO
+    // Código de manejo de la interrupción GPIO
 }
 
 void vUART_ISR(void)
 {
-    // Implementación de la rutina de interrupción del UART
+    // Código de manejo de la interrupción UART
 }

@@ -47,7 +47,12 @@
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 70 )
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 7000 ) )
 #define configMAX_TASK_NAME_LEN		( 10 )
-#define configUSE_TRACE_FACILITY	0
+
+#define configUSE_TRACE_FACILITY	1 //Habilita la recopilación de datos de traza
+#define INCLUDE_xTaskGetHandle 1      //Habilita la función xTaskGetHandle que permite obtener el identificador de una tarea
+#define INCLUDE_uxTaskGetStackHighWaterMark 1 // HAbilita la función uxTaskGetStackHighWaterMark que permite obtener la cantidad de memoria disponible en la pila de una tarea
+// #define configGENERATE_RUN_TIME_STATS 1 //Habilita la generación de estadísticas de tiempo de ejecución
+
 #define configUSE_16_BIT_TICKS		0
 #define configIDLE_SHOULD_YIELD		0
 

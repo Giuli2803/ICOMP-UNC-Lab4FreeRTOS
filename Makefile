@@ -25,8 +25,8 @@
 
 include makedefs
 
-RTOS_SOURCE_DIR=../../Source
-DEMO_SOURCE_DIR=../Common/Minimal
+RTOS_SOURCE_DIR=Source
+DEMO_SOURCE_DIR=Common/Minimal
 
 CFLAGS+=-I hw_include -I . -I ${RTOS_SOURCE_DIR}/include -I ${RTOS_SOURCE_DIR}/portable/GCC/ARM_CM3 -I ../Common/include -D GCC_ARMCM3_LM3S102 -D inline=
 CFLAGS+= -g -O0
