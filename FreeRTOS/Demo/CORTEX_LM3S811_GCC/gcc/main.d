@@ -18,6 +18,4 @@ gcc/main.o: main.c hw_include/DriverLib.h hw_include/DriverLib.h \
  ../../Source/include/mpu_wrappers.h ../../Source/include/task.h \
  ../../Source/include/list.h ../../Source/include/queue.h \
  ../../Source/include/task.h ../../Source/include/semphr.h \
- ../../Source/include/queue.h ../Common/include/integer.h \
- ../Common/include/PollQ.h ../Common/include/semtest.h \
- ../Common/include/BlockQ.h
+ ../../Source/include/queue.h
