@@ -6,10 +6,16 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "hw_memmap.h"
+#include "portable.h"
+#include "uart.h"
 
 #define OLED_WIDTH 96
 #define OLED_HEIGHT 16
 #define MAX_FILTER_SIZE 50
+
+/* Delay between cycles of the 'GENERATOR' task. */
+#define mainGENERATOR_DELAY ((TickType_t)100 / portTICK_PERIOD_MS)
 
 #define mainSENSOR_TASK_PRIORITY (tskIDLE_PRIORITY + 3)
 
@@ -17,7 +23,9 @@
  * Configure the processor and peripherals for this demo.
  */
 static void prvSetupHardware( void );
-static void vPrintTask( void *pvParameters );
+static void vNumberGeneratorTask(void *pvParameters);
+static void vDisplayTask(void *pvParameters);
+void intToStr(int num, char *str);
 
 QueueHandle_t xPrintQueue;
 
@@ -27,17 +35,14 @@ int main( void )
 	prvSetupHardware();
 
 	/* Create the queue used to pass message to vPrintTask. */
-	xPrintQueue = xQueueCreate( 10, sizeof( char * ) );
+	xPrintQueue = xQueueCreate( 10, sizeof(int) );
 
 	/* Start the tasks defined within the file. */
-	//xTaskCreate( vCheckTask, "Check", configMINIMAL_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY, NULL );
-	xTaskCreate( vPrintTask, "Print", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY - 1, NULL );
+    xTaskCreate(vNumberGeneratorTask, "NumberGen", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY - 1, NULL);
+    xTaskCreate(vDisplayTask, "Display", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY - 2, NULL);
 
 	/* Start the scheduler. */
 	vTaskStartScheduler();
-	
-	/* Will only get here if there was insufficient heap to start the
-	scheduler. */
 
 	return 0;
 }
@@ -55,22 +60,49 @@ static void prvSetupHardware( void )
 }
 /*-----------------------------------------------------------*/
 
-static void vPrintTask( void *pvParameters )
+static void vNumberGeneratorTask(void *pvParameters)
 {
-char *pcMessage;
-unsigned portBASE_TYPE uxLine = 0, uxRow = 0;
+    int number = 0;
+	TickType_t xLastExecutionTime;
 
-	for( ;; )
-	{
+	/* Initialise xLastExecutionTime so the first call to vTaskDelayUntil() works
+	* correctly. */
+	xLastExecutionTime = xTaskGetTickCount();
+
+    for (;;)
+    {	
+		vTaskDelayUntil(&xLastExecutionTime, mainGENERATOR_DELAY);
+
+        /* Send the number to the queue. */
+        xQueueSend(xPrintQueue, &number, portMAX_DELAY);
+
+        /* Increment the number. */
+        number = (number + 1) % 41;
+
+        /* Delay for 1 second. */
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
+
+static void vDisplayTask(void *pvParameters)
+{
+	int value = 0;
+	char displayMessage[16];
+	OSRAMClear();
+
+	for (;;) {
 		/* Wait for a message to arrive. */
-		xQueueReceive( xPrintQueue, &pcMessage, portMAX_DELAY );
-
-		/* Write the message to the LCD. */
-		uxRow++;
-		uxLine++;
+		xQueueReceive(xPrintQueue, &value, portMAX_DELAY);
 		OSRAMClear();
-		OSRAMStringDraw( pcMessage, uxLine & 0x3f, uxRow & 0x01);
+		intToStr(value, displayMessage);
+		OSRAMStringDraw("El valor es:", 0, 0);
+		OSRAMStringDraw(displayMessage, 16, 1);
+		/* Delay for 1 second. */
+		vTaskDelay(pdMS_TO_TICKS(1000));
+
+
 	}
+
 }
 
 void vGPIO_ISR(void)
@@ -82,3 +114,43 @@ void vUART_ISR(void)
 {
     // Código de manejo de la interrupción UART
 }
+
+void intToStr(int num, char *str) {
+    int i = 0;
+    int isNegative = 0;
+
+    /* Handle 0 explicitly, otherwise empty string is printed for 0 */
+    if (num == 0) {
+        str[i++] = '0';
+        str[i] = '\0';
+        return;
+    }
+
+    // Handle negative numbers
+    if (num < 0) {
+        isNegative = 1;
+        num = -num;
+    }
+
+    // Process individual digits
+    while (num != 0) {
+        int rem = num % 10;
+        str[i++] = rem + '0';
+        num = num / 10;
+    }
+
+    // If the number is negative, append '-'
+    if (isNegative) {
+        str[i++] = '-';
+    }
+
+    str[i] = '\0'; // Append string terminator
+
+    // Reverse the string
+    for (int start = 0, end = i - 1; start < end; start++, end--) {
+        char temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+    }
+}
+

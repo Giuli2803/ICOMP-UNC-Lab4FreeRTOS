@@ -48,10 +48,11 @@
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 7000 ) )
 #define configMAX_TASK_NAME_LEN		( 10 )
 
+
 #define configUSE_TRACE_FACILITY	1 //Habilita la recopilación de datos de traza
 #define INCLUDE_xTaskGetHandle 1      //Habilita la función xTaskGetHandle que permite obtener el identificador de una tarea
 #define INCLUDE_uxTaskGetStackHighWaterMark 1 // HAbilita la función uxTaskGetStackHighWaterMark que permite obtener la cantidad de memoria disponible en la pila de una tarea
-// #define configGENERATE_RUN_TIME_STATS 1 //Habilita la generación de estadísticas de tiempo de ejecución
+
 
 #define configUSE_16_BIT_TICKS		0
 #define configIDLE_SHOULD_YIELD		0
@@ -73,7 +74,6 @@ to exclude the API function. */
 /* !!!! configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to zero !!!!
 See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY 	191 /* equivalent to 0xa0, or priority 5. */
-
 
 
 #endif /* FREERTOS_CONFIG_H */

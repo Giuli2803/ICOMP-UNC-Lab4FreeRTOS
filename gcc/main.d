@@ -17,4 +17,5 @@ gcc/main.o: main.c hw_include/DriverLib.h hw_include/DriverLib.h \
  Source/include/../../Source/portable/GCC/ARM_CM3/portmacro.h \
  Source/include/mpu_wrappers.h Source/include/task.h \
  Source/include/list.h Source/include/queue.h Source/include/task.h \
- Source/include/semphr.h Source/include/queue.h
+ Source/include/semphr.h Source/include/queue.h hw_include/hw_memmap.h \
+ Source/include/portable.h hw_include/uart.h
