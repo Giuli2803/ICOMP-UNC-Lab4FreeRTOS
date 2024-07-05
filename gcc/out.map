@@ -45,186 +45,186 @@ SRAM             0x20000000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000     0x4588
+.text           0x00000000     0x4578
  *(.isr_vector)
  .isr_vector    0x00000000       0xb8 gcc/startup.o
                 0x00000000                g_pfnVectors
  *(.text*)
  .text          0x000000b8       0x54 gcc/startup.o
                 0x000000b8                ResetISR
- .text          0x0000010c      0x26c gcc/main.o
+ .text          0x0000010c      0x260 gcc/main.o
                 0x0000010c                main
-                0x00000264                vGPIO_ISR
-                0x00000270                vUART_ISR
-                0x0000027c                intToStr
- .text          0x00000378      0x15e gcc/list.o
-                0x00000378                vListInitialise
-                0x000003b6                vListInitialiseItem
-                0x000003ce                vListInsertEnd
-                0x00000414                vListInsert
-                0x00000484                uxListRemove
- *fill*         0x000004d6        0x2 
- .text          0x000004d8      0xc9c gcc/queue.o
-                0x000004d8                xQueueGenericReset
-                0x000005c0                xQueueGenericCreate
-                0x00000684                xQueueGenericSend
-                0x000007d8                xQueueGenericSendFromISR
-                0x000008a2                xQueueGiveFromISR
-                0x0000095a                xQueueReceive
-                0x00000aa0                xQueueSemaphoreTake
-                0x00000bdc                xQueuePeek
-                0x00000d24                xQueueReceiveFromISR
-                0x00000de6                xQueuePeekFromISR
-                0x00000e4c                uxQueueMessagesWaiting
-                0x00000e6c                uxQueueSpacesAvailable
-                0x00000e96                uxQueueMessagesWaitingFromISR
-                0x00000eb4                vQueueDelete
-                0x00000ece                uxQueueGetQueueNumber
-                0x00000ee4                vQueueSetQueueNumber
-                0x00000efe                ucQueueGetQueueType
-                0x000010ea                xQueueIsQueueEmptyFromISR
-                0x00001144                xQueueIsQueueFullFromISR
- .text          0x00001174     0x1c10 gcc/tasks.o
-                0x00001174                xTaskCreate
-                0x00001408                xTaskDelayUntil
-                0x000014ac                vTaskDelay
-                0x000014f4                eTaskGetState
-                0x0000155c                vTaskStartScheduler
-                0x000015d4                vTaskEndScheduler
-                0x00001604                vTaskSuspendAll
-                0x00001620                xTaskResumeAll
-                0x000017f8                xTaskGetTickCount
-                0x00001814                xTaskGetTickCountFromISR
-                0x00001834                uxTaskGetNumberOfTasks
-                0x00001848                pcTaskGetName
-                0x0000194e                xTaskGetHandle
-                0x000019d0                uxTaskGetSystemState
-                0x00001aa0                xTaskCatchUpTicks
-                0x00001ad4                xTaskIncrementTick
-                0x00001ce0                vTaskSwitchContext
-                0x00001d6c                vTaskPlaceOnEventList
-                0x00001d98                vTaskPlaceOnUnorderedEventList
-                0x00001e08                xTaskRemoveFromEventList
-                0x00001f98                vTaskRemoveFromUnorderedEventList
-                0x000020d8                vTaskSetTimeOutState
-                0x00002108                vTaskInternalSetTimeOutState
-                0x00002134                xTaskCheckForTimeOut
-                0x000021b8                vTaskMissedYield
-                0x000021d0                uxTaskGetTaskNumber
-                0x000021fa                vTaskSetTaskNumber
-                0x000022a4                vTaskGetInfo
-                0x0000242a                uxTaskGetStackHighWaterMark
-                0x00002494                xTaskGetCurrentTaskHandle
-                0x000024b0                uxTaskResetEventItemValue
-                0x000024e0                ulTaskGenericNotifyTake
-                0x00002594                xTaskGenericNotifyWait
-                0x00002678                xTaskGenericNotify
-                0x0000283c                xTaskGenericNotifyFromISR
-                0x00002a74                vTaskGenericNotifyGiveFromISR
-                0x00002c28                xTaskGenericNotifyStateClear
-                0x00002c80                ulTaskGenericNotifyValueClear
- *fill*         0x00002d84        0xc 
- .text          0x00002d90      0x250 gcc/port.o
-                0x00002d90                pxPortInitialiseStack
-                0x00002e1a                vPortSVCHandler
-                0x00002e66                xPortStartScheduler
-                0x00002ea8                vPortEndScheduler
-                0x00002eb4                vPortEnterCritical
-                0x00002ee8                vPortExitCritical
-                0x00002f1c                xPortPendSVHandler
-                0x00002f66                xPortSysTickHandler
-                0x00002fac                vPortSetupTimerInterrupt
- .text          0x00002fe0       0xe8 gcc/heap_1.o
-                0x00002fe0                pvPortMalloc
-                0x00003084                vPortFree
-                0x00003096                vPortInitialiseBlocks
-                0x000030ac                xPortGetFreeHeapSize
- .text          0x000030c8      0x2dc gcc/BlockQ.o
-                0x000030c8                vStartBlockingQueueTasks
-                0x00003312                xAreBlockingQueuesStillRunning
- .text          0x000033a4      0x184 gcc/PollQ.o
-                0x000033a4                vStartPolledQueueTasks
-                0x000034e8                xArePollingQueuesStillRunning
- .text          0x00003528      0x114 gcc/integer.o
-                0x00003528                vStartIntegerMathTasks
-                0x000035e8                xAreIntegerMathsTaskStillRunning
- .text          0x0000363c      0x290 gcc/semtest.o
-                0x0000363c                vStartSemaphoreTasks
-                0x00003870                xAreSemaphoreTasksStillRunning
- .text          0x000038cc      0x4c0 gcc/osram96x16.o
-                0x00003a0c                OSRAMClear
-                0x00003a7c                OSRAMStringDraw
-                0x00003b84                OSRAMImageDraw
-                0x00003c2a                OSRAMInit
-                0x00003cec                OSRAMDisplayOn
-                0x00003d60                OSRAMDisplayOff
- .text          0x00003d8c       0x20 hw_include/libdriver.a(gpio_pintypei2c_.o)
-                0x00003d8c                GPIOPinTypeI2C
- .text          0x00003dac        0x4 hw_include/libdriver.a(i2c_mastercontrol_.o)
-                0x00003dac                I2CMasterControl
- .text          0x00003db0        0x4 hw_include/libdriver.a(i2c_masterdataput_.o)
-                0x00003db0                I2CMasterDataPut
- .text          0x00003db4       0x34 hw_include/libdriver.a(i2c_masterinit_.o)
-                0x00003db4                I2CMasterInit
- .text          0x00003de8       0x18 hw_include/libdriver.a(i2c_masterintstatus_.o)
-                0x00003de8                I2CMasterIntStatus
- .text          0x00003e00        0x8 hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
-                0x00003e00                I2CMasterSlaveAddrSet
- .text          0x00003e08       0x90 hw_include/libdriver.a(sysctl_clockget_.o)
-                0x00003e08                SysCtlClockGet
- .text          0x00003e98       0xcc hw_include/libdriver.a(sysctl_clockset_.o)
-                0x00003e98                SysCtlClockSet
- .text          0x00003f64       0x1c hw_include/libdriver.a(sysctl_peripheralenable_.o)
-                0x00003f64                SysCtlPeripheralEnable
- .text          0x00003f80        0x0 hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
- .text          0x00003f80        0x0 hw_include/libdriver.a(sysctl_pulxtals_.o)
- .text          0x00003f80       0x48 hw_include/libdriver.a(gpio_dirmodeset_.o)
-                0x00003f80                GPIODirModeSet
- .text          0x00003fc8      0x11c hw_include/libdriver.a(gpio_padconfigset_.o)
-                0x00003fc8                GPIOPadConfigSet
- .text          0x000040e4        0xc hw_include/libdriver.a(i2c_masterenable_.o)
-                0x000040e4                I2CMasterEnable
- .text          0x000040f0       0xb0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
-                0x000040f0                memset
- .text          0x000041a0       0x90 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
-                0x000041a0                memcpy
+                0x00000258                intToStr
+                0x00000354                vGPIO_ISR
+                0x00000360                vUART_ISR
+ .text          0x0000036c      0x15e gcc/list.o
+                0x0000036c                vListInitialise
+                0x000003aa                vListInitialiseItem
+                0x000003c2                vListInsertEnd
+                0x00000408                vListInsert
+                0x00000478                uxListRemove
+ *fill*         0x000004ca        0x2 
+ .text          0x000004cc      0xc9c gcc/queue.o
+                0x000004cc                xQueueGenericReset
+                0x000005b4                xQueueGenericCreate
+                0x00000678                xQueueGenericSend
+                0x000007cc                xQueueGenericSendFromISR
+                0x00000896                xQueueGiveFromISR
+                0x0000094e                xQueueReceive
+                0x00000a94                xQueueSemaphoreTake
+                0x00000bd0                xQueuePeek
+                0x00000d18                xQueueReceiveFromISR
+                0x00000dda                xQueuePeekFromISR
+                0x00000e40                uxQueueMessagesWaiting
+                0x00000e60                uxQueueSpacesAvailable
+                0x00000e8a                uxQueueMessagesWaitingFromISR
+                0x00000ea8                vQueueDelete
+                0x00000ec2                uxQueueGetQueueNumber
+                0x00000ed8                vQueueSetQueueNumber
+                0x00000ef2                ucQueueGetQueueType
+                0x000010de                xQueueIsQueueEmptyFromISR
+                0x00001138                xQueueIsQueueFullFromISR
+ .text          0x00001168     0x1c10 gcc/tasks.o
+                0x00001168                xTaskCreate
+                0x000013fc                xTaskDelayUntil
+                0x000014a0                vTaskDelay
+                0x000014e8                eTaskGetState
+                0x00001550                vTaskStartScheduler
+                0x000015c8                vTaskEndScheduler
+                0x000015f8                vTaskSuspendAll
+                0x00001614                xTaskResumeAll
+                0x000017ec                xTaskGetTickCount
+                0x00001808                xTaskGetTickCountFromISR
+                0x00001828                uxTaskGetNumberOfTasks
+                0x0000183c                pcTaskGetName
+                0x00001942                xTaskGetHandle
+                0x000019c4                uxTaskGetSystemState
+                0x00001a94                xTaskCatchUpTicks
+                0x00001ac8                xTaskIncrementTick
+                0x00001cd4                vTaskSwitchContext
+                0x00001d60                vTaskPlaceOnEventList
+                0x00001d8c                vTaskPlaceOnUnorderedEventList
+                0x00001dfc                xTaskRemoveFromEventList
+                0x00001f8c                vTaskRemoveFromUnorderedEventList
+                0x000020cc                vTaskSetTimeOutState
+                0x000020fc                vTaskInternalSetTimeOutState
+                0x00002128                xTaskCheckForTimeOut
+                0x000021ac                vTaskMissedYield
+                0x000021c4                uxTaskGetTaskNumber
+                0x000021ee                vTaskSetTaskNumber
+                0x00002298                vTaskGetInfo
+                0x0000241e                uxTaskGetStackHighWaterMark
+                0x00002488                xTaskGetCurrentTaskHandle
+                0x000024a4                uxTaskResetEventItemValue
+                0x000024d4                ulTaskGenericNotifyTake
+                0x00002588                xTaskGenericNotifyWait
+                0x0000266c                xTaskGenericNotify
+                0x00002830                xTaskGenericNotifyFromISR
+                0x00002a68                vTaskGenericNotifyGiveFromISR
+                0x00002c1c                xTaskGenericNotifyStateClear
+                0x00002c74                ulTaskGenericNotifyValueClear
+ *fill*         0x00002d78        0x8 
+ .text          0x00002d80      0x250 gcc/port.o
+                0x00002d80                pxPortInitialiseStack
+                0x00002e0a                vPortSVCHandler
+                0x00002e56                xPortStartScheduler
+                0x00002e98                vPortEndScheduler
+                0x00002ea4                vPortEnterCritical
+                0x00002ed8                vPortExitCritical
+                0x00002f0c                xPortPendSVHandler
+                0x00002f56                xPortSysTickHandler
+                0x00002f9c                vPortSetupTimerInterrupt
+ .text          0x00002fd0       0xe8 gcc/heap_1.o
+                0x00002fd0                pvPortMalloc
+                0x00003074                vPortFree
+                0x00003086                vPortInitialiseBlocks
+                0x0000309c                xPortGetFreeHeapSize
+ .text          0x000030b8      0x2dc gcc/BlockQ.o
+                0x000030b8                vStartBlockingQueueTasks
+                0x00003302                xAreBlockingQueuesStillRunning
+ .text          0x00003394      0x184 gcc/PollQ.o
+                0x00003394                vStartPolledQueueTasks
+                0x000034d8                xArePollingQueuesStillRunning
+ .text          0x00003518      0x114 gcc/integer.o
+                0x00003518                vStartIntegerMathTasks
+                0x000035d8                xAreIntegerMathsTaskStillRunning
+ .text          0x0000362c      0x290 gcc/semtest.o
+                0x0000362c                vStartSemaphoreTasks
+                0x00003860                xAreSemaphoreTasksStillRunning
+ .text          0x000038bc      0x4c0 gcc/osram96x16.o
+                0x000039fc                OSRAMClear
+                0x00003a6c                OSRAMStringDraw
+                0x00003b74                OSRAMImageDraw
+                0x00003c1a                OSRAMInit
+                0x00003cdc                OSRAMDisplayOn
+                0x00003d50                OSRAMDisplayOff
+ .text          0x00003d7c       0x20 hw_include/libdriver.a(gpio_pintypei2c_.o)
+                0x00003d7c                GPIOPinTypeI2C
+ .text          0x00003d9c        0x4 hw_include/libdriver.a(i2c_mastercontrol_.o)
+                0x00003d9c                I2CMasterControl
+ .text          0x00003da0        0x4 hw_include/libdriver.a(i2c_masterdataput_.o)
+                0x00003da0                I2CMasterDataPut
+ .text          0x00003da4       0x34 hw_include/libdriver.a(i2c_masterinit_.o)
+                0x00003da4                I2CMasterInit
+ .text          0x00003dd8       0x18 hw_include/libdriver.a(i2c_masterintstatus_.o)
+                0x00003dd8                I2CMasterIntStatus
+ .text          0x00003df0        0x8 hw_include/libdriver.a(i2c_masterslaveaddrset_.o)
+                0x00003df0                I2CMasterSlaveAddrSet
+ .text          0x00003df8       0x90 hw_include/libdriver.a(sysctl_clockget_.o)
+                0x00003df8                SysCtlClockGet
+ .text          0x00003e88       0xcc hw_include/libdriver.a(sysctl_clockset_.o)
+                0x00003e88                SysCtlClockSet
+ .text          0x00003f54       0x1c hw_include/libdriver.a(sysctl_peripheralenable_.o)
+                0x00003f54                SysCtlPeripheralEnable
+ .text          0x00003f70        0x0 hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+ .text          0x00003f70        0x0 hw_include/libdriver.a(sysctl_pulxtals_.o)
+ .text          0x00003f70       0x48 hw_include/libdriver.a(gpio_dirmodeset_.o)
+                0x00003f70                GPIODirModeSet
+ .text          0x00003fb8      0x11c hw_include/libdriver.a(gpio_padconfigset_.o)
+                0x00003fb8                GPIOPadConfigSet
+ .text          0x000040d4        0xc hw_include/libdriver.a(i2c_masterenable_.o)
+                0x000040d4                I2CMasterEnable
+ .text          0x000040e0       0xb0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+                0x000040e0                memset
+ .text          0x00004190       0x90 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+                0x00004190                memcpy
  *(.rodata*)
- .rodata        0x00004230       0x45 gcc/main.o
- *fill*         0x00004275        0x3 
- .rodata        0x00004278        0x9 gcc/tasks.o
-                0x00004278                uxTopUsedPriority
- *fill*         0x00004281        0x3 
- .rodata        0x00004284       0x30 gcc/BlockQ.o
- .rodata        0x000042b4       0x10 gcc/PollQ.o
- .rodata        0x000042c4        0x8 gcc/integer.o
- .rodata        0x000042cc       0x20 gcc/semtest.o
- .rodata        0x000042ec      0x25e gcc/osram96x16.o
- *fill*         0x0000454a        0x2 
- .rodata        0x0000454c        0xc hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
-                0x0000454c                g_pulRCGCRegs
- .rodata        0x00004558       0x30 hw_include/libdriver.a(sysctl_pulxtals_.o)
-                0x00004558                g_pulXtals
-                0x00004588                        _etext = .
+ .rodata        0x00004220       0x45 gcc/main.o
+ *fill*         0x00004265        0x3 
+ .rodata        0x00004268        0x9 gcc/tasks.o
+                0x00004268                uxTopUsedPriority
+ *fill*         0x00004271        0x3 
+ .rodata        0x00004274       0x30 gcc/BlockQ.o
+ .rodata        0x000042a4       0x10 gcc/PollQ.o
+ .rodata        0x000042b4        0x8 gcc/integer.o
+ .rodata        0x000042bc       0x20 gcc/semtest.o
+ .rodata        0x000042dc      0x25e gcc/osram96x16.o
+ *fill*         0x0000453a        0x2 
+ .rodata        0x0000453c        0xc hw_include/libdriver.a(sysctl_pulrcgcregs_.o)
+                0x0000453c                g_pulRCGCRegs
+ .rodata        0x00004548       0x30 hw_include/libdriver.a(sysctl_pulxtals_.o)
+                0x00004548                g_pulXtals
+                0x00004578                        _etext = .
 
-.glue_7         0x00004588        0x0
- .glue_7        0x00004588        0x0 linker stubs
+.glue_7         0x00004578        0x0
+ .glue_7        0x00004578        0x0 linker stubs
 
-.glue_7t        0x00004588        0x0
- .glue_7t       0x00004588        0x0 linker stubs
+.glue_7t        0x00004578        0x0
+ .glue_7t       0x00004578        0x0 linker stubs
 
-.vfp11_veneer   0x00004588        0x0
- .vfp11_veneer  0x00004588        0x0 linker stubs
+.vfp11_veneer   0x00004578        0x0
+ .vfp11_veneer  0x00004578        0x0 linker stubs
 
-.v4_bx          0x00004588        0x0
- .v4_bx         0x00004588        0x0 linker stubs
+.v4_bx          0x00004578        0x0
+ .v4_bx         0x00004578        0x0 linker stubs
 
-.iplt           0x00004588        0x0
- .iplt          0x00004588        0x0 gcc/startup.o
+.iplt           0x00004578        0x0
+ .iplt          0x00004578        0x0 gcc/startup.o
 
-.rel.dyn        0x00004588        0x0
- .rel.iplt      0x00004588        0x0 gcc/startup.o
+.rel.dyn        0x00004578        0x0
+ .rel.iplt      0x00004578        0x0 gcc/startup.o
 
-.data           0x20000000        0x4 load address 0x00004588
+.data           0x20000000        0x4 load address 0x00004578
                 0x20000000                        _data = .
  *(vtable)
  *(.data)
@@ -258,10 +258,10 @@ Linker script and memory map
  .data          0x20000004        0x0 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
                 0x20000004                        _edata = .
 
-.igot.plt       0x20000004        0x0 load address 0x0000458c
+.igot.plt       0x20000004        0x0 load address 0x0000457c
  .igot.plt      0x20000004        0x0 gcc/startup.o
 
-.bss            0x20000004     0x1d84 load address 0x0000458c
+.bss            0x20000004     0x1d84 load address 0x0000457c
                 0x20000004                        _bss = .
  *(.bss)
  .bss           0x20000004      0x100 gcc/startup.o
@@ -315,21 +315,21 @@ LOAD /usr/lib/gcc/arm-none-eabi/13.2.1/thumb/nofp/libgcc.a
 OUTPUT(gcc/RTOSDemo.axf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x00000000     0x4991
+.debug_info     0x00000000     0x497e
  .debug_info    0x00000000      0x13b gcc/startup.o
- .debug_info    0x0000013b      0x41b gcc/main.o
- .debug_info    0x00000556      0x29f gcc/list.o
- .debug_info    0x000007f5      0xf9b gcc/queue.o
- .debug_info    0x00001790     0x1a06 gcc/tasks.o
- .debug_info    0x00003196      0x2d7 gcc/port.o
- .debug_info    0x0000346d      0x18e gcc/heap_1.o
- .debug_info    0x000035fb      0x44e gcc/BlockQ.o
- .debug_info    0x00003a49      0x33e gcc/PollQ.o
- .debug_info    0x00003d87      0x217 gcc/integer.o
- .debug_info    0x00003f9e      0x3d5 gcc/semtest.o
- .debug_info    0x00004373      0x397 gcc/osram96x16.o
- .debug_info    0x0000470a      0x135 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
- .debug_info    0x0000483f      0x152 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
+ .debug_info    0x0000013b      0x408 gcc/main.o
+ .debug_info    0x00000543      0x29f gcc/list.o
+ .debug_info    0x000007e2      0xf9b gcc/queue.o
+ .debug_info    0x0000177d     0x1a06 gcc/tasks.o
+ .debug_info    0x00003183      0x2d7 gcc/port.o
+ .debug_info    0x0000345a      0x18e gcc/heap_1.o
+ .debug_info    0x000035e8      0x44e gcc/BlockQ.o
+ .debug_info    0x00003a36      0x33e gcc/PollQ.o
+ .debug_info    0x00003d74      0x217 gcc/integer.o
+ .debug_info    0x00003f8b      0x3d5 gcc/semtest.o
+ .debug_info    0x00004360      0x397 gcc/osram96x16.o
+ .debug_info    0x000046f7      0x135 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memset.o)
+ .debug_info    0x0000482c      0x152 /usr/lib/gcc/arm-none-eabi/13.2.1/../../../arm-none-eabi/lib/thumb/nofp/libc.a(libc_a-memcpy-stub.o)
 
 .debug_abbrev   0x00000000     0x1511
  .debug_abbrev  0x00000000       0xee gcc/startup.o
@@ -396,7 +396,7 @@ LOAD linker stubs
 .debug_str      0x00000000     0x1d94
  .debug_str     0x00000000     0x1d94 gcc/startup.o
                                 0x166 (size before relaxing)
- .debug_str     0x00001d94      0x324 gcc/main.o
+ .debug_str     0x00001d94      0x319 gcc/main.o
  .debug_str     0x00001d94      0x278 gcc/list.o
  .debug_str     0x00001d94      0x813 gcc/queue.o
  .debug_str     0x00001d94      0xf1a gcc/tasks.o

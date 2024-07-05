@@ -14,34 +14,34 @@
 #define OLED_HEIGHT 16
 #define MAX_FILTER_SIZE 50
 
-/* Delay between cycles of the 'GENERATOR' task. */
-#define mainGENERATOR_DELAY ((TickType_t)100 / portTICK_PERIOD_MS)
+/* Tiempo de espera entre los ciclos del 'GENERATOR' task. */
+#define mainGENERATOR_DELAY ((TickType_t)100 / portTICK_PERIOD_MS) // 100 ms
 
+/* Prioridad de las tareas. */
 #define mainSENSOR_TASK_PRIORITY (tskIDLE_PRIORITY + 3)
 
-/*
- * Configure the processor and peripherals for this demo.
- */
+/* Declaración de funciones */
 static void prvSetupHardware( void );
 static void vNumberGeneratorTask(void *pvParameters);
 static void vDisplayTask(void *pvParameters);
 void intToStr(int num, char *str);
 
+/* Defino colas de mensajes para el envio de datos */
 QueueHandle_t xPrintQueue;
 
 int main( void )
 {
-	/* Configure the clocks, UART and GPIO. */
+	/* Configuro los clocks, UART y el Display. */
 	prvSetupHardware();
 
-	/* Create the queue used to pass message to vPrintTask. */
+	/* Instancio las colas de mensajes */
 	xPrintQueue = xQueueCreate( 10, sizeof(int) );
 
-	/* Start the tasks defined within the file. */
+	/* Defino las tareas solicitadas */
     xTaskCreate(vNumberGeneratorTask, "NumberGen", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY - 1, NULL);
     xTaskCreate(vDisplayTask, "Display", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY - 2, NULL);
 
-	/* Start the scheduler. */
+	/* inicio el scheduler. */
 	vTaskStartScheduler();
 
 	return 0;
@@ -53,7 +53,7 @@ static void prvSetupHardware( void )
 	/* Setup the PLL. */
 	SysCtlClockSet( SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_6MHZ );
 
-	/* Initialise the LCD> */
+	/* Initialise the LCD */
     OSRAMInit( false );
     OSRAMStringDraw("www.FreeRTOS.org", 0, 0);
 	OSRAMStringDraw("LM3S811 demo", 16, 1);
@@ -65,22 +65,19 @@ static void vNumberGeneratorTask(void *pvParameters)
     int number = 0;
 	TickType_t xLastExecutionTime;
 
-	/* Initialise xLastExecutionTime so the first call to vTaskDelayUntil() works
-	* correctly. */
+	/* Inicializa la variable xLastExecutionTime con el valor actual de ticks.*/
 	xLastExecutionTime = xTaskGetTickCount();
 
     for (;;)
     {	
-		vTaskDelayUntil(&xLastExecutionTime, mainGENERATOR_DELAY);
+		vTaskDelayUntil(&xLastExecutionTime, mainGENERATOR_DELAY); // Define el periodo de ejecución de la tarea
 
-        /* Send the number to the queue. */
+        /* Envio numero por la Cola de mensajes */
         xQueueSend(xPrintQueue, &number, portMAX_DELAY);
 
-        /* Increment the number. */
-        number = (number + 1) % 41;
+        /* Incrementa el numero que simula el sensor. */
+        number = (number + 1) % 56;
 
-        /* Delay for 1 second. */
-        vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 
@@ -91,28 +88,13 @@ static void vDisplayTask(void *pvParameters)
 	OSRAMClear();
 
 	for (;;) {
-		/* Wait for a message to arrive. */
-		xQueueReceive(xPrintQueue, &value, portMAX_DELAY);
-		OSRAMClear();
-		intToStr(value, displayMessage);
+		xQueueReceive(xPrintQueue, &value, portMAX_DELAY);/* Recibe el valor de la cola de mensajes */
+		OSRAMClear(); // Limpia la pantalla
+		intToStr(value, displayMessage);   // Convierte el valor a string
 		OSRAMStringDraw("El valor es:", 0, 0);
-		OSRAMStringDraw(displayMessage, 16, 1);
-		/* Delay for 1 second. */
-		vTaskDelay(pdMS_TO_TICKS(1000));
-
-
+		OSRAMStringDraw(displayMessage, 16, 16);
 	}
 
-}
-
-void vGPIO_ISR(void)
-{
-    // Código de manejo de la interrupción GPIO
-}
-
-void vUART_ISR(void)
-{
-    // Código de manejo de la interrupción UART
 }
 
 void intToStr(int num, char *str) {
@@ -152,5 +134,15 @@ void intToStr(int num, char *str) {
         str[start] = str[end];
         str[end] = temp;
     }
+}
+
+void vGPIO_ISR(void)
+{
+    // Código de manejo de la interrupción GPIO
+}
+
+void vUART_ISR(void)
+{
+    // Código de manejo de la interrupción UART
 }
 
