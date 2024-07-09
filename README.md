@@ -4,7 +4,7 @@
 
 En base a la Demo mostrada en clase del procesador 'CORTEX_LM3S102_GCC'. Se debe modificar la demo para la realización de las siguientes tareas:
 
-- Task 1: Simula un sensor de temperatura determinado.
+- Task 1: Simula un sensor de temperatura determinado. Con una frecuencia de 10Hz (10 muestras por segundo).
 - Task 2: Recibe los valores del sensor y aplica un filtro pasa bajo. (Realiza el promedio de los N valores definidos)
 - Task 3: Grafica los valores de la temperatura en el tiempo.
 - Task 4: Implementar una tareas que muestre periodicamente estadistica de las tareas. Ej: top (muestra el uso del cpu, uso de memoria, etc)
