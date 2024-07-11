@@ -31,7 +31,7 @@
 static void prvSetupHardware( void );
 static void vNumberGeneratorTask(void *pvParameters);   //Task 1
 static void vFilterTask(void *pvParameters);            //Task 2
-static void vDisplayTask(void *pvParameters);           // Task 3
+static void vDisplayTask(void *pvParameters);           //Task 3
 static void vStatsTask(void *pvParameters);             //Task 4
 void addValueToSignal(unsigned char image[OLED_WIDTH * 2], int value);
 void intToStr(int num, char *str);                      // Función para convertir un entero a un string
@@ -168,25 +168,22 @@ static void vStatsTask(void *pvParameters)
  */
 void addValueToSignal(unsigned char image[OLED_WIDTH * 2], int value) 
 {
-    // shift signal        [Arreglo de arriba con valores hasta 8] [Arreglo de abajo con valores hasta 8]
-    // [OLED_WIDTH * 2] = [(01234567),(89101112131415), (...95),      .....191]
-    for (int i = OLED_WIDTH - 1; i > 0; i--) { // arranca desde 95 hasta 1
-        //como son char muevo de un byte en cada movimiento
-        image[i] = image[i - 1]; //mueve todos los valores un lugar a la derecha desde 95 hasta 0 (se pierde el 91) 
-        image[i + OLED_WIDTH] = image[i - 1 + OLED_WIDTH];  //mueve todos los valores un lugar a la derecha desde 191 hasta el 96
-        // moviendo los 2 arreglos libero el primer byte ubicado en el arreglo de 0~95 (arreglo de arriba)
-        // y el primer byte del segundo arreglo 96~191 (arreglo de abajo)
+    // shift signal
+    for (int i = OLED_WIDTH - 1; i > 0; i--) { 
+        image[i] = image[i - 1];                            //mueve todos los valores un lugar a la derecha desde 95 hasta 0 (se pierde anterior del 95) 
+        image[i + OLED_WIDTH] = image[i - 1 + OLED_WIDTH];  //mueve todos los valores un lugar a la derecha desde 191 hasta el 96 (se pierde anterior del 191) 
+        // moviendo los 2 arreglos libero el primer byte ubicado en el arreglo de 0~95 (arreglo de arriba) y el primer byte del segundo arreglo 96~191 (arreglo de abajo)
     }
 
-    image[OLED_WIDTH] = 0;
-    image[0] = 0;
+    image[OLED_WIDTH] = 0;  // borro el valor del primer byte (arreglo de abajo)
+    image[0] = 0;           // borro el valor del primer byte (arreglo de arriba)
 
-    // Añado el nuevo valor dependeindo su valor al sector correspondiente
+    // Añado el nuevo valor pero dependiendo su valor es al sector que corresponde (arriba o abajo)
     if (value < 8) {
-        // debe ingresar apartir de el Byte 4
+        // Abajo
         image[OLED_WIDTH] = (1 << (7 - value));
     } else {
-        // debe ingresar apartir de el Byte 0
+        // Arriba
         image[0] = (1 << (15 - value));
     }
 }
