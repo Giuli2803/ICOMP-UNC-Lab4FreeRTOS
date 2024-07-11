@@ -42,9 +42,6 @@ QueueHandle_t xSensorQueue;
 QueueHandle_t xDisplayQueue;
 QueueHandle_t xFilterQueue;
 
-/* Valor del filtro */
-int filterSize = 10; 
-
 int main( void )
 {
     /* Configuro los clocks, UART y el Display. */
@@ -57,7 +54,7 @@ int main( void )
 
 	/* Defino las tareas solicitadas */
     xTaskCreate(vNumberGeneratorTask, "NumberGen", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY, NULL);
-    //xTaskCreate(vFilterTask, "Filter", configMINIMAL_STACK_SIZE, NULL, mainFILTER_TASK_PRIORITY, NULL);
+    xTaskCreate(vFilterTask, "Filter", configMINIMAL_STACK_SIZE, NULL, mainFILTER_TASK_PRIORITY, NULL);
     xTaskCreate(vDisplayTask, "Display", configMINIMAL_STACK_SIZE, NULL, mainDISPLAY_TASK_PRIORITY, NULL);
     //xTaskCreate(vStatsTask, "Stats", configMINIMAL_STACK_SIZE, NULL, mainSTATS_TASK_PRIORITY, NULL);
 
@@ -100,8 +97,8 @@ static void vNumberGeneratorTask(void *pvParameters)
 
         /* Envio numero por la Cola de mensajes */
         
-        xQueueSend(xDisplayQueue, &number, portMAX_DELAY);
-        //xQueueSend(xFilterQueue, &number, portMAX_DELAY);
+        //xQueueSend(xDisplayQueue, &number, portMAX_DELAY);
+        xQueueSend(xFilterQueue, &number, portMAX_DELAY);
 
         /* Incrementa el numero que simula el sensor. */
         number = (number + 1) % 16;
@@ -112,24 +109,33 @@ static void vNumberGeneratorTask(void *pvParameters)
 static void vFilterTask(void *pvParameters)
 {
     int sensorValue = 0;
-    int filterBuffer[MAX_FILTER_SIZE] = {0};
-    int index = 0;
+    static int filterBuffer[MAX_FILTER_SIZE] = {0};
     int sum = 0;
+    int N = 1; 
 
     for (;;)
     {
-        if (xQueueReceive(xFilterQueue, &sensorValue, portMAX_DELAY))
+        xQueueReceive(xFilterQueue, &sensorValue, portMAX_DELAY);
+      
+        /* Shift values */
+        for(int i = MAX_FILTER_SIZE - 1; i > 0; i--)
         {
-            /*sum -= filterBuffer[index];
-            filterBuffer[index] = sensorValue;
-            sum += sensorValue;
-            index = (index + 1) % filterSize;
-
-            int filteredValue = sum / filterSize;
-            */
-
-            //xQueueSend(xFilterQueue, &filteredValue, portMAX_DELAY);
+            filterBuffer[i] = filterBuffer[i - 1];
         }
+
+        /* Add new value */
+        filterBuffer[0] = sensorValue;
+
+        sum = 0;
+        /* Calculate average with N values*/
+        for(int i = 0; i < N; i++)
+        {
+            sum += filterBuffer[i];
+        }
+
+        sum = sum / N;
+        
+        xQueueSend(xDisplayQueue, &sum, portMAX_DELAY); 
     }
 }
 
