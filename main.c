@@ -1,4 +1,4 @@
-/* Environment includes. */
+/* Environment includes. */ 
 #include "DriverLib.h"
 
 /* Scheduler includes. */
@@ -42,6 +42,8 @@ QueueHandle_t xSensorQueue;
 QueueHandle_t xDisplayQueue;
 QueueHandle_t xFilterQueue;
 
+volatile int N = 1; 
+
 int main( void )
 {
     /* Configuro los clocks, UART y el Display. */
@@ -76,10 +78,15 @@ static void prvSetupHardware( void )
 	OSRAMStringDraw("LM3S811 demo", 16, 1);
 
     /* Enable the UART. */
-    //SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
     /* Configure the UART for 8-N-1 operation. */
-    //UARTConfigSet(UART0_BASE, mainBAUD_RATE, UART_CONFIG_WLEN_8 | UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE);
+    UARTConfigSet(UART0_BASE, mainBAUD_RATE, UART_CONFIG_WLEN_8 | UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE);
+
+    // Habilitar las interrupciones del UART0
+    UARTIntRegister(UART0_BASE, vUART_ISR); // Registrar la ISR
+    IntEnable(INT_UART0); // Habilitar la interrupción UART0 en el NVIC
+    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT); // Habilitar interrupciones de recepción y tiempo de espera
 }
 /*-----------------------------------------------------------*/
 
@@ -111,7 +118,6 @@ static void vFilterTask(void *pvParameters)
     int sensorValue = 0;
     static int filterBuffer[MAX_FILTER_SIZE] = {0};
     int sum = 0;
-    int N = 1; 
 
     for (;;)
     {
@@ -235,6 +241,38 @@ void intToStr(int num, char *str) {
 
 void vUART_ISR(void)
 {
- //falta implementar
+    uint32_t ui32Status;
+    char c;
+
+    /* Get the interrupt status. */
+    ui32Status = UARTIntStatus(UART0_BASE, true);
+
+    /* Clear the asserted interrupts. */
+    UARTIntClear(UART0_BASE, ui32Status);
+
+    /* Loop while there are characters in the receive FIFO. */
+    while(UARTCharsAvail(UART0_BASE))
+    {
+        /* Read the next character from the UART and store it in the buffer. */
+        c = UARTCharGet(UART0_BASE);
+
+        /* Check for end of line (enter key). */
+        if (c == '+') 
+        {
+            N++;
+            if (N > MAX_FILTER_SIZE) 
+            {
+                N = MAX_FILTER_SIZE;
+            }
+        }
+        else if (c == '-') 
+        {
+            N--;
+            if (N < 1) 
+            {
+                N = 1;
+            }
+        }
+    }
 }
 

@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "freertos.h": "c"
     },
     "cmake.sourceDirectory": "/home/giuliano/Desktop/TP4/ICOMP-UNC-Lab4FreeRTOS/Source"
 }
