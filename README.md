@@ -20,11 +20,24 @@ Ademas de estas tareas el programa debe tener las siguientes caracteristicas:
 - Mediante el void vUART_ISR(void) debo recibir un N valido para aplicar al filtro pasabajo.
 
 ## Instrucciones para ejecutar:
+Se debe tener instalado el compilador (Para trabajar en compilación cruzada):
+```sh 
+arm-none-eab-gcc
+```
+El comando para construir la solución, se genera el .axf en la carpeta gcc:
+```sh
+make
+``` 
+Para ejecutar la emulación con quemu desde la carpeta principal se puede usar el comando:
 
-- ```arm-none-eab-gcc```(Tener instalado)
-- ```make``` (para construir la solución, se genera el .axf en la carpeta gcc)
-- ```sudo qemu-system-arm -machine lm3s811evb -kernel ./gcc/RTOSDemo.axf```
-(Ejecuto el la emulación con quemu desde la carpeta principal)
+```sh 
+sudo qemu-system-arm -machine lm3s811evb -kernel ./gcc/RTOSDemo.axf
+```
+El siguiente comando agrega ```-serial stdio``` al comando anterior que sirve para redirigir la salida del UART a la terminal y enviarle entradas:
+
+```sh
+sudo qemu-system-arm -machine lm3s811evb -kernel ./gcc/RTOSDemo.axf -serial stdio
+```
 
 ## Funcionamiento pantalla 96x16 
 
@@ -37,11 +50,15 @@ Mediante el grafico se observa que los primeros 96 valores (de 0~95) del arreglo
 
 Inicialización de vector imagen:
 
-```static unsigned char imagen[OLED_WIDTH * 2] = {0}; //tamaño de 181 valores char```
+```C
+static unsigned char imagen[OLED_WIDTH * 2] = {0}; //tamaño de 181 valores char
+```
 
 Justificación del tamaño:
 
-```[OLED_WIDTH * 2] = [(char0),(char1),(char2), ...... ,(char95), (char96),(char97),(char98), ...... ,(char191)]```
+```C
+[OLED_WIDTH * 2] = [(char0),(char1),(char2), ...... ,(char95), (char96),(char97),(char98), ...... ,(char191)]
+```
 
 
 
