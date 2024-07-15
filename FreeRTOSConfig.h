@@ -52,7 +52,17 @@
 #define configUSE_TRACE_FACILITY	1 //Habilita la recopilación de datos de traza
 #define INCLUDE_xTaskGetHandle 1      //Habilita la función xTaskGetHandle que permite obtener el identificador de una tarea
 #define INCLUDE_uxTaskGetStackHighWaterMark 1 // HAbilita la función uxTaskGetStackHighWaterMark que permite obtener la cantidad de memoria disponible en la pila de una tarea
+#define configGENERATE_RUN_TIME_STATS 1
+//----------------------------------------------------------//
 
+extern volatile unsigned long ulHighFrequencyTimerTicks;
+
+/* ulHighFrequencyTimerTicks is already being incremented at 20KHz.  Just set
+its value back to 0. */
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() ( ulHighFrequencyTimerTicks = 0UL )
+#define portGET_RUN_TIME_COUNTER_VALUE()	ulHighFrequencyTimerTicks
+
+//----------------------------------------------------------//
 
 #define configUSE_16_BIT_TICKS		0
 #define configIDLE_SHOULD_YIELD		0

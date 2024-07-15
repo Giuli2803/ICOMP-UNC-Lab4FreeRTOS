@@ -19,6 +19,7 @@
 #define OLED_HEIGHT 16
 #define MAX_FILTER_SIZE 50
 #define mainGENERATOR_DELAY ((TickType_t)100 / portTICK_PERIOD_MS)  // Tiempo de espera entre los ciclos del 'GENERATOR' task. (100 ms)
+#define mainSTATS_DELAY ((TickType_t)1000 / portTICK_PERIOD_MS)
 #define mainSENSOR_TASK_PRIORITY (tskIDLE_PRIORITY + 3)             // Prioridad de la tarea 'GENERATOR'.
 #define mainFILTER_TASK_PRIORITY (tskIDLE_PRIORITY + 2)             // Prioridad de la tarea 'FILTER'.
 #define mainDISPLAY_TASK_PRIORITY (tskIDLE_PRIORITY + 2)            // Prioridad de la tarea 'DISPLAY'.
@@ -27,22 +28,29 @@
 /* Configuracion UART - note que no utiliza FIFO por lo que no es muy eficiente. */
 #define mainBAUD_RATE (19200)
 
+volatile unsigned long ulHighFrequencyTimerTicks = 0;
+
 /* Declaración de funciones */
 static void prvSetupHardware( void );
 static void vNumberGeneratorTask(void *pvParameters);   //Task 1
 static void vFilterTask(void *pvParameters);            //Task 2
 static void vDisplayTask(void *pvParameters);           //Task 3
 static void vStatsTask(void *pvParameters);             //Task 4
+void UARTSend(const char *pucBuffer);
 void addValueToSignal(unsigned char image[OLED_WIDTH * 2], int value);
 void intToStr(int num, char *str);                      // Función para convertir un entero a un string
 void vUART_ISR(void);
+void vSetupHighFrequencyTimer(void);
+void Timer0IntHandler(void);
 
 /* Defino colas de mensajes para el envio de datos */
 QueueHandle_t xSensorQueue;
 QueueHandle_t xDisplayQueue;
 QueueHandle_t xFilterQueue;
 
-volatile int N = 1; 
+volatile int N = 1;
+
+/*-----------------------------------------------------------*/
 
 int main( void )
 {
@@ -55,10 +63,10 @@ int main( void )
     xDisplayQueue = xQueueCreate(10,sizeof(int));
 
 	/* Defino las tareas solicitadas */
-    xTaskCreate(vNumberGeneratorTask, "NumberGen", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY, NULL);
+    xTaskCreate(vNumberGeneratorTask, "NumGen", configMINIMAL_STACK_SIZE, NULL, mainSENSOR_TASK_PRIORITY, NULL);
     xTaskCreate(vFilterTask, "Filter", configMINIMAL_STACK_SIZE, NULL, mainFILTER_TASK_PRIORITY, NULL);
     xTaskCreate(vDisplayTask, "Display", configMINIMAL_STACK_SIZE, NULL, mainDISPLAY_TASK_PRIORITY, NULL);
-    //xTaskCreate(vStatsTask, "Stats", configMINIMAL_STACK_SIZE, NULL, mainSTATS_TASK_PRIORITY, NULL);
+    xTaskCreate(vStatsTask, "Stats", configMINIMAL_STACK_SIZE, NULL, mainSTATS_TASK_PRIORITY, NULL);
 
 	/* inicio el scheduler. */
 	vTaskStartScheduler();
@@ -72,11 +80,15 @@ static void prvSetupHardware( void )
 	/* Setup the PLL. */
 	SysCtlClockSet( SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_6MHZ );
 
+    vSetupHighFrequencyTimer();
+
 	/* Initialise the LCD */
     OSRAMInit( false );
     OSRAMStringDraw("www.FreeRTOS.org", 0, 0);
 	OSRAMStringDraw("LM3S811 demo", 16, 1);
 
+
+    
     /* Enable the UART. */
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
@@ -164,14 +176,91 @@ static void vDisplayTask(void *pvParameters)
     }
 }
 
+
 static void vStatsTask(void *pvParameters)
-{
-    for (;;)
-    {
-        vTaskDelay(pdMS_TO_TICKS(5000)); // Muestra estadísticas cada 5 segundos
-        // Mostrar estadísticas de las tareas (uso de CPU, memoria, etc.)
+{  
+    TickType_t xLastExecutionTime;
+    xLastExecutionTime = xTaskGetTickCount(); // Inicializa la variable xLastExecutionTime con el valor actual de ticks.
+
+    // Variables para almacenar la información de las tareas
+    TaskStatus_t *pxTaskStatusArray;
+    volatile UBaseType_t uxArraySize;
+    uxArraySize = uxTaskGetNumberOfTasks(); // retorna el número de tareas en el sistema
+    pxTaskStatusArray = pvPortMalloc(uxArraySize * sizeof(TaskStatus_t)); // Reserva memoria para almacenar la información de las tareas
+    
+    if (pxTaskStatusArray == NULL) {
+        for (;;)
+        ;
+    }
+
+    for (;;) {
+
+        vTaskDelayUntil(&xLastExecutionTime, mainSTATS_DELAY);
+        volatile UBaseType_t x;
+        unsigned int ulTotalRunTime, ulStatsAsPercentage;
+        char temp[10] = "";
+
+        UARTSend("\x1B[2J\x1B[H"); // ANSI command to clear screen
+        UARTSend("----- Stats of the system -----\r\n");
+        UARTSend("Task\tCPU %\tStatus\tStack HighWaterMark\r\n");
+
+        uxArraySize = uxTaskGetSystemState(pxTaskStatusArray, uxArraySize, &ulTotalRunTime);
+        /* For percentage calculations. */
+        ulTotalRunTime /= 100UL;
+
+        // Recorro structura recibida de la tarea
+        for (x = 0; x < uxArraySize; x++) {
+
+            UARTSend(pxTaskStatusArray[x].pcTaskName);
+            UARTSend("\t");
+
+            if (ulTotalRunTime >0) 
+            {
+                ulStatsAsPercentage = pxTaskStatusArray[x].ulRunTimeCounter / ulTotalRunTime;
+                if (ulStatsAsPercentage == 0) 
+                {
+                    UARTSend("0");
+                } else {
+                    intToStr(ulStatsAsPercentage, temp);
+                    UARTSend(temp);
+                }
+            } else 
+            {
+                UARTSend("-");
+            }
+
+            UARTSend("\t");
+
+            switch (pxTaskStatusArray[x].eCurrentState) 
+            {
+                case eRunning:
+                UARTSend("Running");
+                break;
+                case eReady:
+                UARTSend("Ready");
+                break;
+                case eBlocked:
+                UARTSend("Blocked");
+                break;
+                case eSuspended:
+                UARTSend("Suspended");
+                break;
+                case eDeleted:
+                UARTSend("Deleted");
+                break;
+                case eInvalid:
+                UARTSend("Invalid");
+                break;
+            }
+
+            UARTSend("\t");
+            intToStr(pxTaskStatusArray[x].usStackHighWaterMark, temp);
+            UARTSend(temp);
+            UARTSend("\r\n");
+        }
     }
 }
+
 
 /**
  * @brief Adds a value to the OLED signal array and shifts the existing values.
@@ -276,3 +365,40 @@ void vUART_ISR(void)
     }
 }
 
+void UARTSend(const char *pucBuffer)
+{
+    while (*pucBuffer != '\0') {
+        UARTCharPut(UART0_BASE, *pucBuffer);
+        pucBuffer++;
+    }
+}
+
+/*-----------------------------Timer 0------------------------------*/
+
+void vSetupHighFrequencyTimer(void) 
+{
+    // Habilito el Timer0
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+    TimerConfigure(TIMER0_BASE,TIMER_CFG_32_BIT_TIMER);
+
+    IntPrioritySet(INT_TIMER0A, 0);
+
+    IntMasterEnable();
+    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+    
+    /* Bajar el 700 aumenta la precision del calculo */
+    TimerLoadSet(TIMER0_BASE, TIMER_A, 90);
+    TimerIntRegister(TIMER0_BASE,TIMER_A,Timer0IntHandler);
+    TimerEnable(TIMER0_BASE,TIMER_A);
+}
+
+void Timer0IntHandler(void) {
+  TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+
+  /* Keep a count of the total number of 20KHz ticks.  This is used by the
+  run time stats functionality to calculate how much CPU time is used by
+  each task. */
+  ulHighFrequencyTimerTicks++;
+}
+
+/*-----------------------------------------------------------*/
