@@ -17,9 +17,10 @@
 /* Defines */
 #define OLED_WIDTH 96
 #define OLED_HEIGHT 16
-#define MAX_FILTER_SIZE 50
+#define MAX_FILTER_SIZE 40
+#define MAX_TEMP_MEASUREMENTS 40
 #define mainGENERATOR_DELAY ((TickType_t)100 / portTICK_PERIOD_MS)  // Tiempo de espera entre los ciclos del 'GENERATOR' task. (100 ms)
-#define mainSTATS_DELAY ((TickType_t)1000 / portTICK_PERIOD_MS)
+#define mainSTATS_DELAY ((TickType_t)1000 / portTICK_PERIOD_MS)     // Tiempo de espera entre los ciclos del 'STATS' task. (1000 ms)
 #define mainSENSOR_TASK_PRIORITY (tskIDLE_PRIORITY + 3)             // Prioridad de la tarea 'GENERATOR'.
 #define mainFILTER_TASK_PRIORITY (tskIDLE_PRIORITY + 2)             // Prioridad de la tarea 'FILTER'.
 #define mainDISPLAY_TASK_PRIORITY (tskIDLE_PRIORITY + 2)            // Prioridad de la tarea 'DISPLAY'.
@@ -36,18 +37,18 @@ static void vNumberGeneratorTask(void *pvParameters);   //Task 1
 static void vFilterTask(void *pvParameters);            //Task 2
 static void vDisplayTask(void *pvParameters);           //Task 3
 static void vStatsTask(void *pvParameters);             //Task 4
-void UARTSend(const char *pucBuffer);
-void addValueToSignal(unsigned char image[OLED_WIDTH * 2], int value);
+void UARTSend(const char *pucBuffer);                   // Función para enviar datos por UART
+void addValueToSignal(unsigned char image[OLED_WIDTH * 2], int value); // Función para agregar un valor al arreglo de la señal
 void intToStr(int num, char *str);                      // Función para convertir un entero a un string
-void vUART_ISR(void);
-void vSetupHighFrequencyTimer(void);
-void Timer0IntHandler(void);
+void vUART_ISR(void);                                   // Función para manejar la interrupción del UART
+void configTimer0(void);                                // Función para configurar el Timer0
+void Timer0IntHandler(void);                            // Función para manejar la interrupción del Timer0
 
 /* Defino colas de mensajes para el envio de datos */
-QueueHandle_t xSensorQueue;
 QueueHandle_t xDisplayQueue;
 QueueHandle_t xFilterQueue;
 
+// Variable global para el filtro
 volatile int N = 1;
 
 /*-----------------------------------------------------------*/
@@ -58,7 +59,6 @@ int main( void )
     prvSetupHardware();
 
     /* Instancio las colas de mensajes */
-    //xSensorQueue = xQueueCreate(10, sizeof(int));
     xFilterQueue = xQueueCreate(10, sizeof(int));
     xDisplayQueue = xQueueCreate(10,sizeof(int));
 
@@ -77,34 +77,34 @@ int main( void )
 
 static void prvSetupHardware( void )
 {
-	/* Setup the PLL. */
+	/* Configuración del PLL (Phase Locked Loop). */
 	SysCtlClockSet( SYSCTL_SYSDIV_10 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_6MHZ );
 
-    vSetupHighFrequencyTimer();
+    configTimer0();
 
-	/* Initialise the LCD */
+	/* Inicialización el LCD */
     OSRAMInit( false );
     OSRAMStringDraw("www.FreeRTOS.org", 0, 0);
 	OSRAMStringDraw("LM3S811 demo", 16, 1);
-
-
     
-    /* Enable the UART. */
+    /* Habilitación el UART. */
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 
-    /* Configure the UART for 8-N-1 operation. */
+    /* Configuración del UART para 8-N-1 operation. */
     UARTConfigSet(UART0_BASE, mainBAUD_RATE, UART_CONFIG_WLEN_8 | UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE);
 
     // Habilitar las interrupciones del UART0
-    UARTIntRegister(UART0_BASE, vUART_ISR); // Registrar la ISR
-    IntEnable(INT_UART0); // Habilitar la interrupción UART0 en el NVIC
-    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT); // Habilitar interrupciones de recepción y tiempo de espera
+    UARTIntRegister(UART0_BASE, vUART_ISR);                 // Registrar la ISR
+    IntEnable(INT_UART0);                                   // Habilitar la interrupción UART0 en el NVIC
+    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);   // Habilitar interrupciones de recepción y tiempo de espera
 }
-/*-----------------------------------------------------------*/
+
+/*-----------------------------Tareas-----------------------------*/
 
 static void vNumberGeneratorTask(void *pvParameters)
 {
     int number = 0;
+    int normalizado = 0;
 	TickType_t xLastExecutionTime;
 
 	/* Inicializa la variable xLastExecutionTime con el valor actual de ticks.*/
@@ -114,13 +114,13 @@ static void vNumberGeneratorTask(void *pvParameters)
     {	
 		vTaskDelayUntil(&xLastExecutionTime, mainGENERATOR_DELAY); // Define el periodo de ejecución de la tarea
 
-        /* Envio numero por la Cola de mensajes */
-        
-        //xQueueSend(xDisplayQueue, &number, portMAX_DELAY);
-        xQueueSend(xFilterQueue, &number, portMAX_DELAY);
-
         /* Incrementa el numero que simula el sensor. */
-        number = (number + 1) % 16;
+        number = (number + 1) %MAX_TEMP_MEASUREMENTS;
+
+        normalizado = (number * 16) / MAX_TEMP_MEASUREMENTS;
+
+        /* Envio numero por la Cola de mensajes */
+        xQueueSend(xFilterQueue, &normalizado, portMAX_DELAY);
 
     }
 }
@@ -135,7 +135,7 @@ static void vFilterTask(void *pvParameters)
     {
         xQueueReceive(xFilterQueue, &sensorValue, portMAX_DELAY);
       
-        /* Shift values */
+        /* Shiftea los valores. Elimina el ultimo y deja libre el primero para ser sobre escrito */
         for(int i = MAX_FILTER_SIZE - 1; i > 0; i--)
         {
             filterBuffer[i] = filterBuffer[i - 1];
@@ -188,11 +188,6 @@ static void vStatsTask(void *pvParameters)
     uxArraySize = uxTaskGetNumberOfTasks(); // retorna el número de tareas en el sistema
     pxTaskStatusArray = pvPortMalloc(uxArraySize * sizeof(TaskStatus_t)); // Reserva memoria para almacenar la información de las tareas
     
-    if (pxTaskStatusArray == NULL) {
-        for (;;)
-        ;
-    }
-
     for (;;) {
 
         vTaskDelayUntil(&xLastExecutionTime, mainSTATS_DELAY);
@@ -202,7 +197,7 @@ static void vStatsTask(void *pvParameters)
 
         UARTSend("\x1B[2J\x1B[H"); // ANSI command to clear screen
         UARTSend("----- Stats of the system -----\r\n");
-        UARTSend("Task\tCPU %\tStatus\tStack HighWaterMark\r\n");
+        UARTSend("TaskName\tCPU use%\tState\tStackHighWaterMark\r\n");
 
         uxArraySize = uxTaskGetSystemState(pxTaskStatusArray, uxArraySize, &ulTotalRunTime);
         /* For percentage calculations. */
@@ -210,7 +205,7 @@ static void vStatsTask(void *pvParameters)
 
         // Recorro structura recibida de la tarea
         for (x = 0; x < uxArraySize; x++) {
-
+ 
             UARTSend(pxTaskStatusArray[x].pcTaskName);
             UARTSend("\t");
 
@@ -261,6 +256,7 @@ static void vStatsTask(void *pvParameters)
     }
 }
 
+/*-----------------------------Funciones Auxiliares-----------------------------*/
 
 /**
  * @brief Adds a value to the OLED signal array and shifts the existing values.
@@ -328,6 +324,8 @@ void intToStr(int num, char *str) {
     }
 }
 
+/*-----------------------------UART------------------------------*/
+
 void vUART_ISR(void)
 {
     uint32_t ui32Status;
@@ -375,7 +373,7 @@ void UARTSend(const char *pucBuffer)
 
 /*-----------------------------Timer 0------------------------------*/
 
-void vSetupHighFrequencyTimer(void) 
+void configTimer0(void) 
 {
     // Habilito el Timer0
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
@@ -395,9 +393,9 @@ void vSetupHighFrequencyTimer(void)
 void Timer0IntHandler(void) {
   TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
 
-  /* Keep a count of the total number of 20KHz ticks.  This is used by the
-  run time stats functionality to calculate how much CPU time is used by
-  each task. */
+  /* Mantiene un recuento del número total de ticks de 20 KHz.  Esto es utilizado por el
+  Funcionalidad de estadísticas de tiempo de ejecución para calcular cuánto tiempo de CPU utiliza
+  cada tarea. */
   ulHighFrequencyTimerTicks++;
 }
 
