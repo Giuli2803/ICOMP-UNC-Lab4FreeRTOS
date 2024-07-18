@@ -197,7 +197,7 @@ static void vStatsTask(void *pvParameters)
 
         UARTSend("\x1B[2J\x1B[H"); // ANSI command to clear screen
         UARTSend("----- Stats of the system -----\r\n");
-        UARTSend("TaskName\tCPU use%\tState\tStackHighWaterMark\r\n");
+        UARTSend("Task\t|Ticks\t|CPU%\t|State\t|Stack Free\r\n");
 
         uxArraySize = uxTaskGetSystemState(pxTaskStatusArray, uxArraySize, &ulTotalRunTime);
         /* For percentage calculations. */
@@ -210,21 +210,35 @@ static void vStatsTask(void *pvParameters)
             UARTSend("\t");
 
             if (ulTotalRunTime >0) 
-            {
+            {   
+                
+                if (pxTaskStatusArray[x].ulRunTimeCounter == 0) 
+                {
+                    UARTSend("0");
+                    UARTSend("\t");
+                } else {
+                    intToStr(pxTaskStatusArray[x].ulRunTimeCounter, temp);
+                    UARTSend(temp);
+                    UARTSend("\t");
+                } 
+
                 ulStatsAsPercentage = pxTaskStatusArray[x].ulRunTimeCounter / ulTotalRunTime;
+
                 if (ulStatsAsPercentage == 0) 
                 {
                     UARTSend("0");
+                    UARTSend("\t");
                 } else {
                     intToStr(ulStatsAsPercentage, temp);
                     UARTSend(temp);
+                    UARTSend("\t");
                 }
             } else 
             {
                 UARTSend("-");
             }
 
-            UARTSend("\t");
+            
 
             switch (pxTaskStatusArray[x].eCurrentState) 
             {
@@ -384,8 +398,8 @@ void configTimer0(void)
     IntMasterEnable();
     TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
     
-    /* Bajar el 700 aumenta la precision del calculo */
-    TimerLoadSet(TIMER0_BASE, TIMER_A, 90);
+    /* Bajar el 100 aumenta la precision del calculo */
+    TimerLoadSet(TIMER0_BASE, TIMER_A, 100);
     TimerIntRegister(TIMER0_BASE,TIMER_A,Timer0IntHandler);
     TimerEnable(TIMER0_BASE,TIMER_A);
 }

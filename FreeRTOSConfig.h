@@ -42,7 +42,7 @@
 #define configUSE_PREEMPTION		1
 #define configUSE_IDLE_HOOK			0
 #define configUSE_TICK_HOOK			0
-#define configCPU_CLOCK_HZ			( ( unsigned long ) 20000000 )
+#define configCPU_CLOCK_HZ			( ( unsigned long ) 20000000 ) // 20MHz
 #define configTICK_RATE_HZ			( ( TickType_t ) 1000 )
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 70 )
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 7000 ) )
@@ -56,9 +56,6 @@
 //----------------------------------------------------------//
 
 extern volatile unsigned long ulHighFrequencyTimerTicks;
-
-/* ulHighFrequencyTimerTicks is already being incremented at 20KHz.  Just set
-its value back to 0. */
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() ( ulHighFrequencyTimerTicks = 0UL )
 #define portGET_RUN_TIME_COUNTER_VALUE()	ulHighFrequencyTimerTicks
 

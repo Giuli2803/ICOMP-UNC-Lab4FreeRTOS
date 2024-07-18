@@ -2,7 +2,7 @@
 
 ## Consigna:
 
-En base a la Demo mostrada en clase del procesador `CORTEX_LM3S102_GCC. Se debe modificar la demo para la realización de las siguientes tareas:
+En base a la Demo mostrada en clase del procesador `CORTEX_LM3S102_GCC`. Se debe modificar la demo para la realización de las siguientes tareas:
 
 - Task 1: Simula un sensor de temperatura determinado. Con una frecuencia de 10Hz (10 muestras por segundo).
 - Task 2: Recibe los valores del sensor y aplica un filtro pasa bajo. (Realiza el promedio de los N valores definidos)
@@ -163,7 +163,52 @@ Justificación del tamaño:
 ```
 ## Stats 
 
-//TODO
+En las stats se busco mmediante UART ir mostrando cada 1 segundo los cambios producidos en cada tarea con el siguiente formato:
+```C
+TaskName CPU_use% State StackHighWaterMark
+```
+Formando cuatro columnas con la información requerida y filas por la cantidad de tareas que se tiene.
+
+### Envio de caracteres por UART
+En primer instancia para el envio de caracteres se utiliza la siguiente funcion:
+```sh
+void UARTSend(const char *pucBuffer)
+{
+    while (*pucBuffer != '\0') {
+        UARTCharPut(UART0_BASE, *pucBuffer);
+        pucBuffer++;
+    }
+}
+```
+Esta funcion recibe solamente cadena de caracteres, por lo que tambien hizo falta una funcion auxiliar que convierte de entero a tipo char llamada `intToStr`.
+
+### Desbordamiento de la pila
+
+En este apartado se opto por utilizar la tecnica de detección WaterMark. La  misma se obtiene a travez de la funcion `uxTaskGetSystemState`, que cuando es llamada rellena la structura `TaskStatus_t` para cada tarea del sistema y en esta estructura se encuentra la variable `usStackHighWaterMark` esta indica la cantidad mínima de espacio de pila que queda para la tarea desde que se creó la tarea. Cuanto más cerca esté este valor de cero, más cerca estará la tarea de desbordar su pila.
+
+### timer 0
+
+Se utilizo para el conteo de los ticks un timer, en este caso el timer 0. Se utilizo como ejemplo una demo que tenia un ejemplo de como se utilizaba el mismo para el conteo.
+
+Demo: CORTEX_LM3Sxxxx_Eclipse, del FreeRTOSv8.2.3
+
+## Referencias
+
+### Manejo de colas de mensajes:
+
+https://www.freertos.org/a00018.html
+
+### Stats
+https://www.freertos.org/rtos-run-time-stats.html
+https://www.freertos.org/uxTaskGetSystemState.html
+https://sourceforge.net/projects/freertos/files/FreeRTOS/V8.2.3/
+
+https://www.freertos.org/rtos-run-time-stats.html
+
+### FreeRTOSConfig.h
+
+https://www.freertos.org/a00110.html
+
 
 
 
