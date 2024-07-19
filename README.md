@@ -1,5 +1,3 @@
-# ICOMP-UNC-Lab4FreeRTOS
-
 ## Consigna:
 
 En base a la Demo mostrada en clase del procesador `CORTEX_LM3S102_GCC`. Se debe modificar la demo para la realización de las siguientes tareas:
@@ -161,15 +159,29 @@ Justificación del tamaño:
 ```C
 [OLED_WIDTH * 2] = [(char0),(char1),(char2), ...... ,(char95), (char96),(char97),(char98), ...... ,(char191)]
 ```
+### Resultados:
+
+Con [N = 1]:
+
+![Display1](https://github.com/user-attachments/assets/86f018af-4608-4f07-a161-9c5abe1cd101)
+
+Con [N > 1]:
+
+![Display2](https://github.com/user-attachments/assets/628e6b6d-2b06-468e-92ed-6a7aa91a4948)
+
+Con [N > 1] y atenuación establecida:
+
+![Display3](https://github.com/user-attachments/assets/53fb93c1-ecbf-4cd5-a3ff-a282b585a9a9)
+
 ## Stats 
 
 En las stats se busco mmediante UART ir mostrando cada 1 segundo los cambios producidos en cada tarea con el siguiente formato:
 ```C
-TaskName CPU_use% State StackHighWaterMark
+Task    |Ticks  |CPU%   |State  |Stack Free
 ```
 Formando cuatro columnas con la información requerida y filas por la cantidad de tareas que se tiene.
 
-### Envio de caracteres por UART
+### Envio de caracteres por UART:
 En primer instancia para el envio de caracteres se utiliza la siguiente funcion:
 ```sh
 void UARTSend(const char *pucBuffer)
@@ -182,15 +194,21 @@ void UARTSend(const char *pucBuffer)
 ```
 Esta funcion recibe solamente cadena de caracteres, por lo que tambien hizo falta una funcion auxiliar que convierte de entero a tipo char llamada `intToStr`.
 
-### Desbordamiento de la pila
+### Desbordamiento de la pila:
 
 En este apartado se opto por utilizar la tecnica de detección WaterMark. La  misma se obtiene a travez de la funcion `uxTaskGetSystemState`, que cuando es llamada rellena la structura `TaskStatus_t` para cada tarea del sistema y en esta estructura se encuentra la variable `usStackHighWaterMark` esta indica la cantidad mínima de espacio de pila que queda para la tarea desde que se creó la tarea. Cuanto más cerca esté este valor de cero, más cerca estará la tarea de desbordar su pila.
 
-### timer 0
+### timer 0:
 
 Se utilizo para el conteo de los ticks un timer, en este caso el timer 0. Se utilizo como ejemplo una demo que tenia un ejemplo de como se utilizaba el mismo para el conteo.
 
 Demo: CORTEX_LM3Sxxxx_Eclipse, del FreeRTOSv8.2.3
+
+Este mismo estaba especificado en la sección de Run Time Stats de la documentación.
+
+### Resultados:
+
+![Stats](https://github.com/user-attachments/assets/7b1db816-28a2-4efe-a83c-3078d9e2df02)
 
 ## Referencias
 
